@@ -115,21 +115,17 @@ img {
   font-size: 3rem; /*16px*3*/
   line-height: 1.2;
   font-weight: 600;
-  margin: 40px 0 20px;
-}
-.main {
-  margin-bottom: 50px;
 }
 
 .main .container {
-  background: url(images/hero-bg.png) no-repeat;
   background-size: contain;
-  background-position: center bottom;
+  background-position: right bottom;
   height: 550px;
-  display: flex;
-  justify-content: center;
 }
 
 .main .content {
   width: 50%;
+}
+.main .normal-text {
+  width: 100%;
 }
