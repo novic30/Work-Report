@@ -1,0 +1,5 @@
+server {
+	listen 8080;
+        root /var/www/site1.local/;
+	server_name site1.local;
+}
