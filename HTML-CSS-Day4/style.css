@@ -1,0 +1,135 @@
+* {
+  box-sizing: border-box; /* Margin padding doesnt affect element width and height*/
+  /*Margin Padding to 0 because some elements have default margins and padding
+   which we don't care about. We will customize it personally for all*/
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --pc: #4891ff;
+  --lightC: #f4f4f6;
+  --darkC: #111;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  background: #fff;
+}
+
+a {
+  text-decoration: none; /*No text decoration*/
+  color: #333;
+}
+
+ul {
+  list-style: none; /*No bullet points*/
+}
+
+img {
+  max-width: 100%; /*Image won't be breaking out of the div and mess up UI when it has certain width*/
+}
+
+/*NAVBAR*/
+.navbar {
+  background: #fff;
+  padding: 20px;
+}
+.navbar .container {
+  display: flex; /* Will be used to arrange items horrizontally*/
+  justify-content: space-between; /*Distribute items evenly and since theres only logo and the list, they will go to the edges*/
+  align-items: center;
+}
+
+.navbar .main-menu ul {
+  display: flex;
+}
+
+.navbar ul li a {
+  padding: 10px 20px;
+  display: block; /*Makes them like blocks to ensure that they act like blocks which makes it easier for us to do padding etc. */
+  font-weight: 600;
+  transition: 0.5s;
+}
+
+.navbar ul li a:hover {
+  color: var(--pc);
+}
+
+.navbar ul li:last-child a {
+  /*This targets the login button*/
+  margin-left: 10px;
+}
+.navbar ul li a i {
+  /*Targeting the icon*/
+  margin-right: 10px;
+}
+
+/*UTILITY CLASSES*/
+.container {
+  max-width: 1100px; /*Generally considered good width*/
+  margin: 0 auto; /*Outside the element border*/
+  padding: 0 15px; /*Inside element border and outside content*/
+}
+
+.container-sm {
+  max-width: 800px; /*Width for those where the width is like 60 percent centered*/
+  margin: 0 auto; /*Outside the element border*/
+  padding: 0 15px; /*Inside element border and outside content*/
+}
+
+/*Buttons*/
+.btn {
+  display: inline-block;
+  padding: 13px 20px;
+  background-color: var(--lightC);
+  color: #333;
+  font-weight: 600;
+  text-decoration: none;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.btn:hover {
+  opacity: 0.8;
+}
+.btn-primary {
+  background: var(--pc);
+  color: #fff;
+}
+.btn-dark {
+  background-color: var(--darkC);
+  color: #fff;
+}
+.btn-block {
+  display: block;
+  width: 100%;
+}
+
+/*TEXT CLASSES*/
+.textLARGE {
+  font-size: 3rem; /*16px*3*/
+  line-height: 1.2;
+  font-weight: 600;
+  margin: 40px 0 20px;
+}
+.main {
+  margin-bottom: 50px;
+}
+
+.main .container {
+  background: url(images/hero-bg.png) no-repeat;
+  background-size: contain;
+  background-position: center bottom;
+  height: 550px;
+  display: flex;
+  justify-content: center;
+}
+
+.main .content {
+  width: 50%;
+}
