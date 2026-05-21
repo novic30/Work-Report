@@ -96,6 +96,7 @@ img {
 
 .btn:hover {
   opacity: 0.8;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 }
 .btn-primary {
   background: var(--pc);
@@ -124,8 +125,14 @@ img {
 }
 
 .main .content {
-  width: 50%;
+  width: 90%;
 }
 .main .normal-text {
   width: 100%;
+}
+.main a {
+  margin-top: 20px;
+}
+.normal-text {
+  margin-top: 20px;
 }
