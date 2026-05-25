@@ -57,3 +57,21 @@ textBox.addEventListener("keydown", (event) => {
   output.textContent = `You pressed "${event.key}".`;
 });
 ```
+
+```js
+let double = n => n * 2;
+// roughly the same as: let double = function(n) { return n * 2 }
+
+alert( double(3) ); // 6
+```
+
+```js
+let age = prompt("What is your age?", 18);
+
+let welcome = (age < 18) ?
+  () => alert('Hello!') :
+  () => alert("Greetings!");
+
+welcome();
+
+```
