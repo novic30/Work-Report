@@ -21,5 +21,10 @@ alert( arr ); // [1, 2]
 arr.length = 5; // return length back
 alert( arr[3] ); // undefined: the values do not return
 
+
+//toString method alternate:
+let arr = [1, 2, 3];
+alert( arr ); // 1,2,3
+
 ```
 
