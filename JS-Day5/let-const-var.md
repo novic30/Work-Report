@@ -20,4 +20,4 @@ Here, an error will be thrown since a const variable isn't allowed to be re-assi
 
 
 VAR
-Old version of let which also reassigned but isn't really used anymore. It's different from let bc it's global scoped and allows for redeclaration like var x = 5; var x = 7; this would work but wouldn't work for let which doesn't allow redeclaration and also isn't global scoped but is function scoped.
+Old version of let which also reassigned but isn't really used anymore. It's different from let bc it's function scoped and allows for redeclaration like var x = 5; var x = 7; this would work but wouldn't work for let which doesn't allow redeclaration and also isn't global scoped but is block scoped.
