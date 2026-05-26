@@ -1,3 +1,5 @@
+Inheritance is a very strong coupling relationship in object-oriented programming. It means all behaviors of the base class are inherited by the subclass by default
+
 ```js
 class ChildClass extends ParentClass { /* … */ }
 ```
