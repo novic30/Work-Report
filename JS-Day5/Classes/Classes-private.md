@@ -6,6 +6,11 @@ class ClassWithPrivate {
   #privateField;
   #privateFieldWithInitializer = 42;
 
+  constructor(x) {
+    this.#privateField = x;
+  }
+
+
   #privateMethod() {
     // …
   }
