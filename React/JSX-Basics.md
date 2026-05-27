@@ -20,4 +20,7 @@ function App() {
 export default App
 ```
 
-Restrictions: functions must start with capital. Random is alright but random isn't acceptable
+Restrictions: 
+- functions must start with capital. Random is alright but random isn't acceptable
+- When calling a component with a number parameter, we must write <Component number={2}/> as normal number=2 is not valid and we need {} js to tell the number.
+
