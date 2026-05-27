@@ -11,7 +11,7 @@ eslint.config.js: Configuration which sets rule about how to write code and ensu
 ALL INSIDE src/ folder:
 	assets/ folder contains icons and logos which you don't want to be publicly served. which wouldrequire import syntax to be accessed.
 	App.css which contains css for styling the App.jsx
-	App.jsx is basically writing the html code
+	App.jsx is basically writing the html code and is the heart of the entire project
 	index.css is the global css which will work everywhere.
 	main.jsx v.imp. Index html is a default html where you can decide title for browser tab. Rest is done through main.jsx where you can actually have working html js sicne it uses App.jsx to modify the default index.htmla nd give it functionlity.
 
