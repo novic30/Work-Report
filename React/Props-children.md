@@ -1,5 +1,6 @@
 Props to components are what parameters are to functions. Props are what make the reusable components dynamic. However, these props are immutable meaning that we can't just do obj.name = "Bla" inside Comp function below.
 When recieving properties, we would be recieving them as an object. This means that the props calling and using will look something like this:
+Note: Components can also have default values for properties like how functions could allow for defaul values for parameters when no input is given for certain parameter.
 ```jsx
 <Comp name="Some Random NAMEEE" age={21} isStudent={true}/> //String, number, boolean
 
