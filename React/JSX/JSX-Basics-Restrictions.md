@@ -1,5 +1,5 @@
 JSX(Javascript XML) is HTML and javascript mixture. It lets you write HTML code inside Javascript. In here, you would have functions returning HTML code.
-JSX is syntactic sugar for React.createElement(type, prop, child)
+JSX is syntactic sugar for React.createElement(type/tags, prop, child)
 
 To run javascript inside the HTML return code, the javascript must be inside {} as shown below. Inside {}, you can have variables, function calls which return string etc., ternary operators, and mathematical operations.
 
