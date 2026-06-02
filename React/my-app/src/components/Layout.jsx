@@ -6,15 +6,16 @@ const Layout = (props) => {
   console.log(props);
 
   const [count, setCount] = useState(55);
+
   const [bgColor, setBgColor] = useState("bg-gray-400");
-  function recolorLayoutBlue() {
-    setBgColor("bg-sky-200");
+  function recolorLayoutColor(colorData) {
+    setBgColor(colorData);
   }
 
   return (
-    <div className={`p-[2rem] ${bgcolor}`}>
+    <div className={`p-[2rem] ${bgColor}`}>
       Layout
-      <Hero data={props.data} count={count} func={recolorLayoutBlue()} />
+      <Hero data={props.data} count={count} func={recolorLayoutColor} />
       <About data={props.data} count={count} />
     </div>
   );
