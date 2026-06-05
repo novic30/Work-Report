@@ -7,7 +7,6 @@ console.log(firstname); //Will print First in the console
 ```
 
 
-
 CONST
 However, when we don't want any reassignment, we use const keyword:
 ```bash
@@ -16,7 +15,6 @@ pi = 043853405;//Throws error
 console.log(pi);//Doesn't even run
 ```
 Here, an error will be thrown since a const variable isn't allowed to be re-assigned at all. No console.log will even happen.
-
 
 
 VAR
