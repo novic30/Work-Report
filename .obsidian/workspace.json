@@ -13,15 +13,30 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Cyber Security HackTheBox/Introduction to Information Security.md",
+                "file": "Cyber Security HackTheBox/Introduction to Information Security/Introduction to Information Security.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
               "title": "Introduction to Information Security"
             }
+          },
+          {
+            "id": "241d287fe9aa144b",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Cyber Security HackTheBox/Introduction to Information Security/Principles of Information Security.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Principles of Information Security"
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -94,7 +109,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Cyber Security HackTheBox/Introduction to Information Security.md",
+                "file": "Cyber Security HackTheBox/Introduction to Information Security/Principles of Information Security.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +119,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for Introduction to Information Security"
+              "title": "Backlinks for Principles of Information Security"
             }
           },
           {
@@ -113,12 +128,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Cyber Security HackTheBox/Introduction to Information Security.md",
+                "file": "Cyber Security HackTheBox/Introduction to Information Security/Principles of Information Security.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from Introduction to Information Security"
+              "title": "Outgoing links from Principles of Information Security"
             }
           },
           {
@@ -156,13 +171,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Cyber Security HackTheBox/Introduction to Information Security.md",
+                "file": "Cyber Security HackTheBox/Introduction to Information Security/Principles of Information Security.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Introduction to Information Security"
+              "title": "Outline of Principles of Information Security"
             }
           }
         ]
@@ -184,10 +199,13 @@
       "github-sync:Sync with Remote": false
     }
   },
-  "active": "47079b1b7384799b",
+  "active": "241d287fe9aa144b",
   "lastOpenFiles": [
+    "Cyber Security HackTheBox/Introduction to Information Security/Structure of InfoSec.md",
+    "Cyber Security HackTheBox/Introduction to Information Security/Principles of Information Security.md",
+    "Cyber Security HackTheBox/Introduction to Information Security/Introduction to Information Security.md",
+    "Cyber Security HackTheBox/Introduction to Information Security",
     "JS-Day5/let-const-var.md",
-    "Cyber Security HackTheBox/Introduction to Information Security.md",
     "Cyber Security HackTheBox"
   ]
 }
