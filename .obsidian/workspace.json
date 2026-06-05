@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "JS-Day5/let-const-var.md",
+                "file": "Cyber Security HackTheBox/Introduction to Information Security.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "let-const-var"
+              "title": "Introduction to Information Security"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "JS-Day5/let-const-var.md",
+                "file": "Cyber Security HackTheBox/Introduction to Information Security.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for let-const-var"
+              "title": "Backlinks for Introduction to Information Security"
             }
           },
           {
@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "JS-Day5/let-const-var.md",
+                "file": "Cyber Security HackTheBox/Introduction to Information Security.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from let-const-var"
+              "title": "Outgoing links from Introduction to Information Security"
             }
           },
           {
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "JS-Day5/let-const-var.md",
+                "file": "Cyber Security HackTheBox/Introduction to Information Security.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of let-const-var"
+              "title": "Outline of Introduction to Information Security"
             }
           }
         ]
@@ -185,5 +185,9 @@
     }
   },
   "active": "47079b1b7384799b",
-  "lastOpenFiles": []
+  "lastOpenFiles": [
+    "JS-Day5/let-const-var.md",
+    "Cyber Security HackTheBox/Introduction to Information Security.md",
+    "Cyber Security HackTheBox"
+  ]
 }
