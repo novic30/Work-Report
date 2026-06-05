@@ -13,3 +13,15 @@ function changeState() {
 Here, no let is used to make sure that there's no accidental changes.
 
 Initial state could be number, String, Object, Array.
+
+```jsx
+let [userData, setUserData] = useState({name:'Rando', age: 21, passion: 'Something Random'});
+```
+
+Ways of updating state:
+```jsx
+Direct Update:
+setCount(count+1)
+Function update:
+setCount(prev => prev+1)
+```
