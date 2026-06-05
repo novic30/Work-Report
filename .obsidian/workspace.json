@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Cyber Security HackTheBox/Introduction to Information Security/Principles of Information Security.md",
+                "file": "Network Security.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Principles of Information Security"
+              "title": "Network Security"
             }
           }
         ],
@@ -109,7 +109,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Cyber Security HackTheBox/Introduction to Information Security/Principles of Information Security.md",
+                "file": "Network Security.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -119,7 +119,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for Principles of Information Security"
+              "title": "Backlinks for Network Security"
             }
           },
           {
@@ -128,12 +128,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Cyber Security HackTheBox/Introduction to Information Security/Principles of Information Security.md",
+                "file": "Network Security.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from Principles of Information Security"
+              "title": "Outgoing links from Network Security"
             }
           },
           {
@@ -171,13 +171,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Cyber Security HackTheBox/Introduction to Information Security/Principles of Information Security.md",
+                "file": "Network Security.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Principles of Information Security"
+              "title": "Outline of Network Security"
             }
           }
         ]
@@ -201,9 +201,10 @@
   },
   "active": "241d287fe9aa144b",
   "lastOpenFiles": [
-    "Cyber Security HackTheBox/Introduction to Information Security/Structure of InfoSec.md",
-    "Cyber Security HackTheBox/Introduction to Information Security/Principles of Information Security.md",
     "Cyber Security HackTheBox/Introduction to Information Security/Introduction to Information Security.md",
+    "Network Security.md",
+    "Cyber Security HackTheBox/Introduction to Information Security/Principles of Information Security.md",
+    "Cyber Security HackTheBox/Introduction to Information Security/Structure of InfoSec.md",
     "Cyber Security HackTheBox/Introduction to Information Security",
     "JS-Day5/let-const-var.md",
     "Cyber Security HackTheBox"

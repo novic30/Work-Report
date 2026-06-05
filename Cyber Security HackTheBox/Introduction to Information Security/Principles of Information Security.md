@@ -1,4 +1,30 @@
-
+> [!info] Table of Contents
+> - [[#What is Information Security (InfoSec)?]]
+> - [[#Core Security Principles]]
+>   - [[#CIA Triad]]
+>     - [[#Confidentiality]]
+>     - [[#Integrity]]
+>     - [[#Availability]]
+>   - [[#Additional Security Principles]]
+>     - [[#Non-Repudiation]]
+>     - [[#Authentication]]
+>     - [[#Privacy]]
+> - [[#Security Processes]]
+>   - [[#1. Risk Assessment]]
+>   - [[#2. Security Planning]]
+>   - [[#3. Security Controls Implementation]]
+>   - [[#4. Monitoring & Detection]]
+>   - [[#5. Incident Response (IR)]]
+>   - [[#6. Disaster Recovery (DR)]]
+>   - [[#7. Continuous Improvement]]
+> - [[#Why Information Security Matters]]
+> - [[#Common Information Security Tools]]
+> - [[#Penetration Testing Tools]]
+> - [[#Operating Systems for Security Professionals]]
+> - [[#Security+ Exam Memorization]]
+>   - [[#CIA Triad]]
+>   - [[#Authentication vs Authorization]]
+>   - [[#Quick Exam Facts]]
 ## What is Information Security (InfoSec)?
 Information Security (InfoSec) is the practice of protecting information and information systems from:
 
