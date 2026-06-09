@@ -38,3 +38,4 @@ IOS
 - Apple never stored user data to SIM cards, always to internal flash
 - Common file types: SQLite databases and PList files
 
+**shared_pref:** It is used to set up apps up. Like how health fitness apps would ask ur age weight on setup. Thus, this folder might contain PII!!!
