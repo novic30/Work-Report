@@ -15,7 +15,7 @@
 **PList:** iOS preference file, similar to XML on Android.  
 **XML:** Android preference file format stored in Shared Prefs folder.  
 **Agent:** An app installed with special permissions to access restricted data.
-
+**DCIM:** This is where pictures directly taken from device would be stored
 ### Android Vs IOS
 ANDROID
 - Based on Linux kernel, open source
@@ -37,3 +37,4 @@ IOS
 - No SD card slot, all data stored on internal NAND flash only
 - Apple never stored user data to SIM cards, always to internal flash
 - Common file types: SQLite databases and PList files
+
