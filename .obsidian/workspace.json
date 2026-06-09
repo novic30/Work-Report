@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Network Security.md",
+                "file": "Untitled.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Network Security"
+              "title": "Untitled"
             }
           }
         ],
@@ -201,8 +201,9 @@
   },
   "active": "241d287fe9aa144b",
   "lastOpenFiles": [
-    "Cyber Security HackTheBox/Introduction to Information Security/Introduction to Information Security.md",
     "Network Security.md",
+    "Untitled.md",
+    "Cyber Security HackTheBox/Introduction to Information Security/Introduction to Information Security.md",
     "Cyber Security HackTheBox/Introduction to Information Security/Principles of Information Security.md",
     "Cyber Security HackTheBox/Introduction to Information Security/Structure of InfoSec.md",
     "Cyber Security HackTheBox/Introduction to Information Security",
