@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Web CTF.md",
+                "file": "Security USCC/Linux Forensics.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Web CTF"
+              "title": "Linux Forensics"
             }
           }
         ]
@@ -78,7 +78,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "right": {
     "id": "52b23d32bf3406df",
@@ -186,12 +187,14 @@
   },
   "active": "e38a960df3fc0f9b",
   "lastOpenFiles": [
-    "Mobile Device Forensics.md",
-    "Web CTF.md",
+    "Cyber Security HackTheBox/Introduction to Information Security/Network Security.md",
+    "Security USCC/Linux Forensics.md",
+    "Security USCC/Mobile Device Forensics.md",
+    "Security USCC/Web CTF.md",
+    "Security USCC",
     "README.md",
     "Untitled.base",
     "Cyber Security HackTheBox/Introduction to Information Security/Introduction to Information Security.md",
-    "Network Security.md",
     "Cyber Security HackTheBox/Introduction to Information Security/Principles of Information Security.md",
     "Cyber Security HackTheBox/Introduction to Information Security/Structure of InfoSec.md",
     "Cyber Security HackTheBox/Introduction to Information Security",
