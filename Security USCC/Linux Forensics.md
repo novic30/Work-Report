@@ -59,3 +59,5 @@ Configuration Files and Folders below:
 
 
 
+SSH
+.ssh private unprotected keys are stolen and used for lateral movement by trying their access against known hosts.
