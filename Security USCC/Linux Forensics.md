@@ -7,7 +7,7 @@ Normal:
 
 /root
 
-/usr and subdirectories contain the executables. Thus those running outside /usr are suspicious
+/usr and subdirectories contain the executables. Thus those running outside /usr maybe suspicious except for /opt which contains 3rd party software
 /usr/bin/
 /usr/lib
 /usr/local
