@@ -1,3 +1,20 @@
+Note: No executables should ever be hidden files starting with . That's likely malicious
+
+in uac live_response/process
+run:
+```bash
+grep -F -- '->' running_processes_full_paths.txt | sed 's/.* -> //' | grep -v ^/
+
+ls -l /proc/*/exe 2>/dev/null | grep deleted
+#For deleted executables still running
+
+
+┌──(a㉿DESKTOP-QEPBAMV)-[/mnt/d/USCC/Linux Day 4/lab/live_response/process]
+└─$ grep deleted running_processes_full_paths.txt
+```
+
+
+
 
 Normal:
 /
@@ -32,3 +49,6 @@ Configuration Files and Folders below:
 /var
 /var/tmp
 /var/log
+
+
+
