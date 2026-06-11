@@ -13,6 +13,13 @@ ls -l /proc/*/exe 2>/dev/null | grep deleted
 └─$ grep deleted running_processes_full_paths.txt
 ```
 
+Looking for sus things through grep:
+![[Pasted image 20260611212005.png]]
+/dev/shm/.rk is suspicious, thus:
+```bash
+grep /dev/shm bodyfile/bodyfile.txt
+```
+
 
 
 
