@@ -1,0 +1,4 @@
+- Go through robots.txt
+- If it's reading through source or something do:
+	- wget -m http://ctfSite.com && wget http://ctfSite.com/robots.txt && grep -R "picoCTF"
+		- "" could be "ctfName" or "{" or "}" or "picoCTF{.\*?}"

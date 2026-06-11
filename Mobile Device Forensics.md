@@ -1,3 +1,4 @@
+
 ### Terminology
 **NAND Flash:** Non-volatile memory chip where device data is stored like System and User related data. This stays even after a reboot.
 **RAM:** Volatile memory, flushed on reboot, used to hold encryption keys.  
@@ -18,6 +19,11 @@
 **XML:** Android preference file format stored in Shared Prefs folder.  
 
 **DCIM:** This is where pictures directly taken from device would be stored
+
+**File Carving:** Using first set of hex data in files (hex file headers) to determine the file type:
+- FF D8 FF E0 = JPEG
+- 89 50 4E 47 0D 0A 1A 0A = PNG
+- 53 51 4C 69 74 65 20 66 6F 72 6D 61 74 20 33 00 /to= SQLITE
 
 
 ### Android Vs IOS
@@ -65,13 +71,52 @@ IOS
 **Agent:** An app installed with special permissions to access restricted data. This means we would download a dummy app which would be ours into the device so that we can use the app to analyse the mobile for forensics
 
 **App Downgrade:** Some apps would be reduced to older versions so that we might access new data for forensics.
+### Backup
+ ###### iTunes for iOS
+ ###### Samsung Smart Switch formerly Kies for backing up Samsung data
+ ###### Cloud is iCloud or Google (Takeout)
+###### Android Debug commands for Android
+
+#### Backing up for Android:
+##### adb:
+- Install ADB Platform tools on your host machine 
+- Configure device settings to allow for backup creation 
+- Using ADB commands, backup your device 
+- IMPORTANT: Following the backup turn OFF USB debugging
+
+- Open a command prompt 
+- Navigate to the directory where adb tools is installed 
+- If you trusted your host machines, issuing the command: adb devices will return your serial number
+- Issue the command: **adb backup –all**
+- Once issues you will need to select **”backup my data”** on your phone 
+- If you choose to encrypt your backup, you will need to supply that password during decompression
+
+##### Android Triage
+- https://github.com/RealityNet/android_triage
+- Collection of adb scripts for backing up and/or querying an Android device for artifacts and build information
+- Free 
+- Requires USB Debugging enabled 
+- https://blog.digitalforensics.it/2021/03/triaging-modernandroid-devices-aka.html
+#### Android-backup-processor
+- The resulting output will be a compressed android backup archive with a .ab file extension 
+- There are several free utilities for decompressing this file archive. Android-backup-processor requires that you have at least Java 7 JRE and can be found here: 
+- https://sourceforge.net/projects/adbextractor/files/latest/download 
+- To unpack: 
+	- java -jar abp.jar [-debug] [-useenv=yourenv] unpack [password] 
 
 # Tools
 
 ### FTK Imager
 - Used to mount physical disks, logical drives, image files, or the contents of a folder and store it as a forensic image (raw dd, E01)
 - Can be used to open these forensic images for analysis even when done by other tools
-- 
-
+**Hexadecimal:** Artifacts can be mapped to their physical location in the device NOR/NAND flash memory by referencing their offset in hexadecimal (like 3d0d for sms generally in Apple)
 **shared_pref:** It is used to set up apps up. Like how health fitness apps would ask ur age weight on setup. Thus, this folder might contain PII!!!
+**apps/shared:** In an Android backup, the Native Android applications and third-party applications are located in the ”apps” folder under <App_Name> 
+Ex:  apps/kik.android , shared/kik.android
+
+### Autopsy
+- Autopsy (free) will mount the uncompressed .ab archive so you can view the contents of each native and third-party application folder 
+- First extract the .tar file you created 
+- Right click on .tar > Open Archive > Extract 
+- In Autopsy Choose Logical Files as your Image Type and navigate to your extracted tar folder
 
