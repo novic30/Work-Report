@@ -59,5 +59,6 @@ Configuration Files and Folders below:
 
 
 
-SSH
+### Terminology
+
 .ssh private unprotected keys are stolen and used for lateral movement by trying their access against known hosts.
