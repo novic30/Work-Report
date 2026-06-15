@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Security USCC/Malware Analysis.md",
+                "file": "WebSockets/WebSocket.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Malware Analysis"
+              "title": "WebSocket"
             }
           }
         ]
@@ -78,7 +78,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "right": {
     "id": "52b23d32bf3406df",
@@ -186,12 +187,18 @@
   },
   "active": "e38a960df3fc0f9b",
   "lastOpenFiles": [
+    "WebSockets/Short Polling vs Long Polling.md",
+    "WebSockets/WebSocket.md",
+    "Security USCC/Web CTF.md",
+    "WebSockets/Pasted image 20260615131402.png",
+    "WebSockets/Pasted image 20260615134831.png",
+    "WebSockets/Pasted image 20260615131612.png",
+    "Security USCC/Malware Analysis.md",
+    "WebSockets",
     "Security USCC/Linux Forensics.md",
     "Security USCC/Images",
-    "Security USCC/Malware Analysis.md",
     "Security USCC/Images/Pasted image 20260611212005.png",
     "Security USCC/Mobile Device Forensics.md",
-    "Security USCC/Web CTF.md",
     "Cyber Security HackTheBox/Introduction to Information Security/Network Security.md",
     "Security USCC",
     "README.md",

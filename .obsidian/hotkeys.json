@@ -1,0 +1,10 @@
+{
+  "floating-toc:hide-toc-panel": [
+    {
+      "modifiers": [
+        "Shift"
+      ],
+      "key": "/"
+    }
+  ]
+}
