@@ -5,3 +5,8 @@ HTTP request and response would contain UPGRADE http header to upgrade the conne
 Eg. It can be used to upgrade a connection from 
 - HTTP/1.1 to HTTP/2
 - HTTP(S) to WebSocket
+
+# Server Initialization
+
+https://socket.io/docs/v3/server-initialization/
+
