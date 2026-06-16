@@ -16,5 +16,9 @@ app.get("/", (req, res, next) => {
 });
 
 io.on("connection", (socket) => {
-  console.log("a user connected");
+  socket.on("msgFromFrontend", (msg) => {
+    console.log(msg);
+    //  io.emit("msgFromBackend", "hello I am from Backend");
+    io.emit("msgFromBackend", `${socket.id}: ${msg}`);
+  });
 }); //Turn on io socket

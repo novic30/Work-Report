@@ -4,14 +4,27 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chat app</title>
-    <script src="/socket.io/socket.io.js"></script>
-    <!--open socket connection fr-->
-    <script>
-      const socket = io();
-      socket.emit("message", "Hello World from frontend"); //This sends post request type stuff from frontend to backend
-    </script>
   </head>
   <body>
-    fughrnkjhrnvkjgtbhngkjbh n
+    <h1>Chat App</h1>
+    <input id="msgInput" type="text" placeholder="Enter a message" />
+    <button id="sendBtn">Send Message</button>
+    <div id="msgBox"></div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io();
+      const msgInput = document.getElementById("msgInput");
+      const sendBtn = document.getElementById("sendBtn");
+      const msgBox = document.getElementById("msgBox");
+      sendBtn.addEventListener("click", () => {
+        socket.emit("msgFromFrontend", msgInput.value);
+      });
+      socket.on("msgFromBackend", (msg) => {
+        const showMsg = document.createElement("p");
+        showMsg.textContent = msg;
+        msgBox.appendChild(showMsg);
+      });
+      //    socket.emit("message", "Hello World from frontend"); //This sends post request type stuff from frontend to backend
+    </script>
   </body>
 </html>
