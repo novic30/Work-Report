@@ -13,11 +13,11 @@ https://socket.io/docs/v3/server-initialization/
 # Code and functions
 ```js
 Declare socket in index.js:
-const { createServer } = require("http");
+const { createServer } = require("http");//provides the port and the http connection
 
-const { Server } = require("socket.io");
+const { Server } = require("socket.io");//upgrades http connection from createServer to socket connection
 
-const express = require("express"); //import
+const express = require("express"); //import express which is used to make app which is where all the apis are made
 
 const app = express(); //making app using express
 
