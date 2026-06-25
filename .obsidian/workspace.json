@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "WebSockets/WebSocket.md",
+                "file": "Security USCC/Web CTF.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "WebSocket"
+              "title": "Web CTF"
             }
           }
         ]
@@ -78,8 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "right": {
     "id": "52b23d32bf3406df",
@@ -187,6 +186,11 @@
   },
   "active": "e38a960df3fc0f9b",
   "lastOpenFiles": [
+    "WebSockets/WebSocket.md",
+    "Calender-App/index.html",
+    "Calender-App/package.json.1839406073",
+    "Calender-App/pnpm-lock.yaml.119162460",
+    "Calender-App/_tmp_3348_eb01fbf975c16c4eef5635c10e637483",
     "WebSockets/WebSocket/node_modules/ws/package.json",
     "WebSockets/WebSocket/node_modules/vary/HISTORY.md",
     "WebSockets/WebSocket/node_modules/undici-types/websocket.d.ts",
@@ -194,11 +198,6 @@
     "WebSockets/WebSocket/node_modules/undici-types/utility.d.ts",
     "WebSockets/WebSocket/node_modules/undici-types/util.d.ts",
     "WebSockets/WebSocket/node_modules/undici-types/snapshot-agent.d.ts",
-    "WebSockets/WebSocket/node_modules/undici-types/round-robin-pool.d.ts",
-    "WebSockets/WebSocket/node_modules/undici-types/retry-handler.d.ts",
-    "WebSockets/WebSocket/node_modules/undici-types/retry-agent.d.ts",
-    "WebSockets/WebSocket/node_modules/undici-types/readable.d.ts",
-    "WebSockets/WebSocket/node_modules/undici-types/proxy-agent.d.ts",
     "WebSockets/WebSocket/node_modules/type-is/node_modules/content-type/README.md",
     "WebSockets/WebSocket/node_modules/type-is/README.md",
     "WebSockets/WebSocket/node_modules/socket.io/Readme.md",
