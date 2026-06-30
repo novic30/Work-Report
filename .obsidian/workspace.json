@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Financial Knowledge/Spending Plan or Budgeting.md",
+                "file": "Financial Knowledge/Banks.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Spending Plan or Budgeting"
+              "title": "Banks"
             }
           }
         ]
@@ -186,8 +186,8 @@
   },
   "active": "e38a960df3fc0f9b",
   "lastOpenFiles": [
-    "Financial Knowledge/Banks.md",
     "Financial Knowledge/Spending Plan or Budgeting.md",
+    "Financial Knowledge/Banks.md",
     "Security USCC/Web CTF.md",
     "Financial Knowledge",
     "WebSockets/WebSocket.md",
