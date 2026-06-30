@@ -13,6 +13,8 @@ Variable Expenses: Things that go up and down
 - Groceries
 - Utility Bill
 
-Cash Flow: Intersection b/w income and expenses.
+Cash Flow: Intersection b/w income and expenses (Summary of income & Expenses).
 - Based on specific time period, like weekly, monthly.
 - Positive cash flow is more money coming in than expenses.
+- Negative is more expenses than income
+- 
