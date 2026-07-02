@@ -53,7 +53,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "email",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -74,7 +74,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -186,22 +187,22 @@
   },
   "active": "e38a960df3fc0f9b",
   "lastOpenFiles": [
-    "Calender-App/alternate.js",
+    "Calender-App/server/routes/public.js",
+    "Calender-App/server/routes/eventTypes.js",
+    "Calender-App/server/routes/bookings.js",
+    "Calender-App/server/routes/availability.js",
+    "Calender-App/server/routes/auth.js",
+    "Calender-App/server/routes",
+    "Calender-App/server/middleware/auth.js",
+    "Calender-App/server/middleware",
+    "Calender-App/server/jobs/reminders.js",
+    "Calender-App/server/jobs",
+    "Calender-App/server/index.js",
     "Financial Knowledge/Spending Plan or Budgeting.md",
     "Financial Knowledge/Banks.md",
     "Security USCC/Web CTF.md",
-    "Financial Knowledge",
     "WebSockets/WebSocket.md",
-    "Calender-App/index.html",
-    "Calender-App/package.json.1839406073",
-    "Calender-App/pnpm-lock.yaml.119162460",
-    "Calender-App/_tmp_3348_eb01fbf975c16c4eef5635c10e637483",
-    "WebSockets/WebSocket/node_modules/ws/package.json",
     "WebSockets/WebSocket/node_modules/vary/HISTORY.md",
-    "WebSockets/WebSocket/node_modules/undici-types/websocket.d.ts",
-    "WebSockets/WebSocket/node_modules/undici-types/webidl.d.ts",
-    "WebSockets/WebSocket/node_modules/undici-types/utility.d.ts",
-    "WebSockets/WebSocket/node_modules/undici-types/util.d.ts",
     "WebSockets/WebSocket/node_modules/type-is/node_modules/content-type/README.md",
     "WebSockets/WebSocket/node_modules/type-is/README.md",
     "WebSockets/WebSocket/node_modules/socket.io/Readme.md",
