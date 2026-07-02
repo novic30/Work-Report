@@ -1,22 +1,16 @@
 {
-  "name": "Calender-App",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "ClinicCal",
+  "version": "2.0.0",
+  "description": "Lightweight scheduling app for Madison Tech Clinic — replaces Cal.com",
+  "main": "server/index.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon ./src/index.js"
+    "dev": "nodemon ./server/index.js",
+    "start": "node ./server/index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "devEngines": {
-    "packageManager": {
-      "name": "pnpm",
-      "version": "^11.8.0",
-      "onFail": "download"
-    }
-  },
   "dependencies": {
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
