@@ -1,4 +1,8 @@
-- Go through robots.txt
+- Go through robots.txt and sitemap.xml
+- Check if it shows Server: and if anything's vulnerable
+
+
+
 - If it's reading through source or something do:
 	- wget -m http://ctfSite.com && wget http://ctfSite.com/robots.txt && grep -R "picoCTF"
 		- "" could be "ctfName" or "{" or "}" or "picoCTF{.\*?}"
