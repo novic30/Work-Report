@@ -50,4 +50,9 @@ export async function sendMail(clinicEmail, opts) {
       accessToken: accessToken.token,
     },
   });
+
+  return mailer.sendMail({
+    from: clinicEmail,
+    ...opts,
+  });
 }
