@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { getEventTypes, deleteEventType } from '../lib/api';
-import { useAuth } from '../lib/auth';
-import type { EventType } from '../types';
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { getEventTypes, deleteEventType } from "../lib/api";
+import { useAuth } from "../lib/auth";
+import type { EventType } from "../types";
 
-const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 export function EventTypes() {
   const { user } = useAuth();
@@ -18,15 +18,18 @@ export function EventTypes() {
       .finally(() => setLoading(false));
   }
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => {
+    load();
+  }, []);
 
   async function handleDelete(id: number, name: string) {
-    if (!confirm(`Delete "${name}"? This will also delete all its bookings.`)) return;
+    if (!confirm(`Delete "${name}"? This will also delete all its bookings.`))
+      return;
     try {
       await deleteEventType(id);
       setEventTypes((prev) => prev.filter((et) => et.id !== id));
     } catch (e: unknown) {
-      alert(e instanceof Error ? e.message : 'Failed to delete');
+      alert(e instanceof Error ? e.message : "Failed to delete");
     }
   }
 
@@ -55,7 +58,9 @@ export function EventTypes() {
       {eventTypes.length === 0 ? (
         <div className="card text-center py-12 space-y-4">
           <div className="text-4xl">📋</div>
-          <h3 className="text-lg font-semibold text-gray-900">No event types yet</h3>
+          <h3 className="text-lg font-semibold text-gray-900">
+            No event types yet
+          </h3>
           <p className="text-sm text-gray-500">
             Create your first scheduling form to start accepting bookings.
           </p>
@@ -69,18 +74,22 @@ export function EventTypes() {
             <div key={et.id} className="card relative">
               {/* Status badge */}
               <div className="absolute top-4 right-4">
-                <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
-                  et.is_active
-                    ? 'bg-green-50 text-green-700'
-                    : 'bg-gray-100 text-gray-500'
-                }`}>
-                  {et.is_active ? 'Active' : 'Inactive'}
+                <span
+                  className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
+                    et.is_active
+                      ? "bg-green-50 text-green-700"
+                      : "bg-gray-100 text-gray-500"
+                  }`}
+                >
+                  {et.is_active ? "Active" : "Inactive"}
                 </span>
               </div>
 
-              <h3 className="text-lg font-semibold text-gray-900 pr-16">{et.name}</h3>
+              <h3 className="text-lg font-semibold text-gray-900 pr-16">
+                {et.name}
+              </h3>
               <p className="mt-1 text-sm text-gray-500 line-clamp-2">
-                {et.description || 'No description'}
+                {et.description || "No description"}
               </p>
 
               {/* Details */}
@@ -103,8 +112,12 @@ export function EventTypes() {
               {et.availability && et.availability.length > 0 && (
                 <div className="mt-3 flex flex-wrap gap-1">
                   {et.availability.map((a) => (
-                    <span key={a.day_of_week} className="text-xs text-gray-500 bg-gray-50 px-1.5 py-0.5 rounded">
-                      {DAY_NAMES[a.day_of_week]} {a.start_time?.slice(0, 5)}-{a.end_time?.slice(0, 5)}
+                    <span
+                      key={a.day_of_week}
+                      className="text-xs text-gray-500 bg-gray-50 px-1.5 py-0.5 rounded"
+                    >
+                      {DAY_NAMES[a.day_of_week]} {a.start_time?.slice(0, 5)}-
+                      {a.end_time?.slice(0, 5)}
                     </span>
                   ))}
                 </div>
@@ -113,13 +126,13 @@ export function EventTypes() {
               {/* Public link */}
               <div className="mt-4 flex items-center gap-2">
                 <code className="text-xs text-primary-600 bg-primary-50 px-2 py-1 rounded flex-1 truncate">
-                  /{user?.slug}/{et.slug}
+                  {window.location.origin}/{user?.slug}/{et.slug}
                 </code>
                 <button
                   onClick={() => {
                     const url = `${window.location.origin}/${user?.slug}/${et.slug}`;
                     navigator.clipboard.writeText(url);
-                    alert('Link copied!');
+                    // alert("Link copied!");
                   }}
                   className="text-xs text-gray-500 hover:text-gray-700"
                   title="Copy link"
