@@ -49,6 +49,7 @@ export async function sendMail(clinicEmail, opts) {
       refreshToken: res.rows[0].refresh_token,
       accessToken: accessToken.token,
     },
+    tls: { rejectUnauthorized: false },
   });
 
   return mailer.sendMail({

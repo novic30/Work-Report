@@ -24,11 +24,11 @@ app.use(
 );
 
 // ── Routes ──────────────────────────────────────────────────────────────────
-app.use(authRoutes);                              // /google, /api/auth/*, /api/me
-app.use("/api/event-types", eventTypeRoutes);     // CRUD for event types
-app.use("/api/event-types", availabilityRoutes);  // /api/event-types/:id/availability
-app.use("/api/bookings", bookingRoutes);          // Admin bookings
-app.use("/api/public", publicRoutes);             // Public booking flow
+app.use(authRoutes); // /google, /api/auth/*, /api/me
+app.use("/api/event-types", eventTypeRoutes); // CRUD for event types
+app.use("/api/event-types", availabilityRoutes); // /api/event-types/:id/availability
+app.use("/api/bookings", bookingRoutes); // Admin bookings
+app.use("/api/public", publicRoutes); // Public booking flow
 
 // ── Health check ────────────────────────────────────────────────────────────
 app.get("/api/health", (_, res) =>
@@ -38,6 +38,4 @@ app.get("/api/health", (_, res) =>
 // ── Start ───────────────────────────────────────────────────────────────────
 startReminderCron();
 
-app.listen(PORT, () =>
-  console.log(`[SERVER] Running on port ${PORT}`),
-);
+app.listen(PORT, () => console.log(`[SERVER] Running on port ${PORT}`));
