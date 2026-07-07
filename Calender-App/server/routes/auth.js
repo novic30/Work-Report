@@ -31,7 +31,7 @@ router.get("/google", (req, res) => {
   const authUrl = oauthClient.generateAuthUrl({
     access_type: "offline",
     scope: SCOPES,
-    prompt: req.query.force === "true" ? "consent" : "select_account",
+    prompt: "consent", //req.query.force === "true" ? "consent" : "select_account",
   });
   res.redirect(authUrl);
 });
@@ -57,9 +57,9 @@ router.get("/api/auth/callback", async (req, res) => {
 
     if (!tokens.refresh_token && existing.rowCount === 0) {
       console.warn(
-        `[OAUTH] No refresh_token for new account ${email} — forcing consent.`,
+        `[OAUTH] No refresh_token for new account ${email}.`, // — forcing consent.`,
       );
-      return res.redirect("/google?force=true");
+      //   return res.redirect("/google?force=true");
     }
 
     // Generate unique slug for new users

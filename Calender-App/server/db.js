@@ -95,7 +95,7 @@ const SCHEMA = `
     ALTER TABLE google_credentials ADD COLUMN IF NOT EXISTS timezone VARCHAR(50) DEFAULT 'America/Chicago';
   EXCEPTION WHEN duplicate_column THEN NULL;
   END $$;
-
+  
 `;
 
 async function initDb() {

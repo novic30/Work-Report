@@ -399,19 +399,25 @@ router.get("/cancel/:cancelToken", async (req, res) => {
     ]);
 
     // Notify client
-    await sendMail(et.clinic_email, {
-      to: b.client_email,
-      subject: `Booking cancelled: ${b.event_name}`,
-      text: `Hello ${b.client_name},\n\nYour appointment on ${new Date(b.start_time).toLocaleString()} has been cancelled.\n\nPlease get in touch to reschedule.`,
-    });
+    try {
+      await sendMail(et.clinic_email, {
+        to: b.client_email,
+        subject: `Booking cancelled: ${b.event_name}`,
+        text: `Hello ${b.client_name},\n\nYour appointment on ${new Date(b.start_time).toLocaleString()} has been cancelled.\n\nPlease get in touch to reschedule.`,
+      });
 
-    // Notify clinic
-    await sendMail(b.clinic_email, {
-      to: b.clinic_email,
-      subject: `Cancellation: ${b.client_name} — ${b.event_name}`,
-      text: `${b.client_name} cancelled their ${b.event_name} on ${new Date(b.start_time).toLocaleString()}.`,
-    });
-
+      // Notify clinic
+      await sendMail(b.clinic_email, {
+        to: b.clinic_email,
+        subject: `Cancellation: ${b.client_name} — ${b.event_name}`,
+        text: `${b.client_name} cancelled their ${b.event_name} on ${new Date(b.start_time).toLocaleString()}.`,
+      });
+    } catch (mailErr) {
+      console.log(
+        "[MAIL] Confirmation email failed but Booking Still Created: ",
+        mailErr.message,
+      );
+    }
     res.json({ success: true, message: "Booking cancelled." });
   } catch (err) {
     console.error(err);
