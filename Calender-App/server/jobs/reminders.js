@@ -92,24 +92,22 @@ export function startReminderCron() {
       `);
 
       for (const b of due1h.rows) {
-        await sendMail({
+        await sendMail(b.clinic_email, {
           to: b.client_email,
           subject: `Starting soon: ${b.event_name}`,
           text: `Hello ${b.client_name},\n\nYour ${b.event_name} starts in about 1 hour. See you soon!`,
         });
 
         // Notify clinic staff
-        const etRes = await pool.query(
-          "SELECT clinic_email FROM event_types WHERE id = $1",
-          [b.event_type_id],
-        );
-        if (etRes.rowCount > 0) {
-          await sendMail({
-            to: etRes.rows[0].clinic_email,
-            subject: `Starting soon: ${b.client_name} — ${b.event_name}`,
-            text: `${b.client_name}'s ${b.event_name} starts in about 1 hour.`,
-          });
-        }
+        // const etRes = await pool.query(
+        //   "SELECT clinic_email FROM event_types WHERE id = $1",
+        //   [b.event_type_id],
+        // );
+        await sendMail(b.clinic_email, {
+          to: b.clinic_email,
+          subject: `Starting soon: ${b.client_name} — ${b.event_name}`,
+          text: `${b.client_name}'s ${b.event_name} starts in about 1 hour.`,
+        });
 
         await pool.query(
           "UPDATE bookings SET reminder_1h = TRUE WHERE id = $1",
