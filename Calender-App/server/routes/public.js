@@ -335,14 +335,15 @@ router.post("/:clinicSlug/:eventSlug/book", async (req, res) => {
     });
 
     // Notification → clinic
-    await sendMail(et.clinic_email, {
-      to: et.clinic_email,
-      subject: `New booking: ${clientName} — ${et.name}`,
-      text:
-        `New appointment booked.\n\nClient: ${clientName} (${clientEmail})\n` +
-        `Event: ${et.name}\nDate: ${date} at ${time}\nDuration: ${et.slot_duration_minutes} min`,
-    });
-
+    if (et.clinic_email != clientEmail) {
+      await sendMail(et.clinic_email, {
+        to: et.clinic_email,
+        subject: `New booking: ${clientName} — ${et.name}`,
+        text:
+          `New appointment booked.\n\nClient: ${clientName} (${clientEmail})\n` +
+          `Event: ${et.name}\nDate: ${date} at ${time}\nDuration: ${et.slot_duration_minutes} min`,
+      });
+    }
     res.status(201).json({ success: true, bookingId });
   } catch (err) {
     console.error(err);

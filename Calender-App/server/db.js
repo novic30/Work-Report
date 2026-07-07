@@ -18,6 +18,7 @@ const SCHEMA = `
     slug         VARCHAR(255) UNIQUE NOT NULL,
     refresh_token TEXT,
     api_token    VARCHAR(255) UNIQUE,
+    timezone VARCHAR(50) DEFAULT 'America/Chicago',
     updated_at   TIMESTAMP DEFAULT NOW()
   );
 
@@ -55,8 +56,8 @@ const SCHEMA = `
     client_email    VARCHAR(255) NOT NULL,
     client_phone    VARCHAR(50),
     custom_answers  JSONB DEFAULT '{}',
-    start_time      TIMESTAMP   NOT NULL,
-    end_time        TIMESTAMP   NOT NULL,
+    start_time      TIMESTAMPTZ   NOT NULL,
+    end_time        TIMESTAMPTZ   NOT NULL,
     google_event_id VARCHAR(255),
     status          VARCHAR(50) DEFAULT 'confirmed',
     reminder_24h    BOOLEAN DEFAULT FALSE,
