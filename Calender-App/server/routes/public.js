@@ -310,16 +310,16 @@ router.post("/:clinicSlug/:eventSlug/book", async (req, res) => {
     // Confirmation email → client
     const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
     const cancelUrl = `${frontendUrl}/cancel/${cancelToken}`;
-
-    await sendMail(et.clinic_email, {
-      to: clientEmail,
-      subject: `Confirmed: ${et.name}`,
-      text:
-        `Hello ${clientName},\n\nYour booking is confirmed!\n\n` +
-        `${et.name}\n${date} at ${time} (${et.slot_duration_minutes} min)\n\n` +
-        `You'll receive reminders 24 hours and 1 hour before your appointment.\n\n` +
-        `To cancel: ${cancelUrl}\n\nSee you soon!`,
-      html: `
+    try {
+      await sendMail(et.clinic_email, {
+        to: clientEmail,
+        subject: `Confirmed: ${et.name}`,
+        text:
+          `Hello ${clientName},\n\nYour booking is confirmed!\n\n` +
+          `${et.name}\n${date} at ${time} (${et.slot_duration_minutes} min)\n\n` +
+          `You'll receive reminders 24 hours and 1 hour before your appointment.\n\n` +
+          `To cancel: ${cancelUrl}\n\nSee you soon!`,
+        html: `
         <div style="font-family:Arial,sans-serif;max-width:500px;margin:0 auto">
           <h2 style="color:#1a1a2e">Booking Confirmed ✓</h2>
           <p>Hello <strong>${clientName}</strong>,</p>
@@ -332,18 +332,25 @@ router.post("/:clinicSlug/:eventSlug/book", async (req, res) => {
           <p><a href="${cancelUrl}" style="color:#dc2626">Cancel this booking</a></p>
         </div>
       `,
-    });
-
-    // Notification → clinic
-    if (et.clinic_email != clientEmail) {
-      await sendMail(et.clinic_email, {
-        to: et.clinic_email,
-        subject: `New booking: ${clientName} — ${et.name}`,
-        text:
-          `New appointment booked.\n\nClient: ${clientName} (${clientEmail})\n` +
-          `Event: ${et.name}\nDate: ${date} at ${time}\nDuration: ${et.slot_duration_minutes} min`,
       });
+
+      // Notification → clinic
+      if (et.clinic_email !== clientEmail) {
+        await sendMail(et.clinic_email, {
+          to: et.clinic_email,
+          subject: `New booking: ${clientName} — ${et.name}`,
+          text:
+            `New appointment booked.\n\nClient: ${clientName} (${clientEmail})\n` +
+            `Event: ${et.name}\nDate: ${date} at ${time}\nDuration: ${et.slot_duration_minutes} min`,
+        });
+      }
+    } catch (mailErr) {
+      console.log(
+        "[MAIL] Confirmation email failed but Booking Still Created: ",
+        mailErr.message,
+      );
     }
+
     res.status(201).json({ success: true, bookingId });
   } catch (err) {
     console.error(err);
