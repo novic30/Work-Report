@@ -1,23 +1,24 @@
 import cron from "node-cron";
 import nodemailer from "nodemailer";
 import pool from "../db.js";
+import { sendMail } from "../mail.js";
 
 // ── Mail ────────────────────────────────────────────────────────────────────
-const mailer = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASSWORD,
-  },
-});
+// const mailer = nodemailer.createTransport({
+//   service: "gmail",
+//   auth: {
+//     user: process.env.SMTP_USER,
+//     pass: process.env.SMTP_PASSWORD,
+//   },
+// });
 
-async function sendMail(opts) {
-  return mailer
-    .sendMail({ from: process.env.SMTP_USER, ...opts })
-    .catch((err) =>
-      console.error(`[MAIL] Failed to ${opts.to}: ${err.message}`),
-    );
-}
+// async function sendMail(opts) {
+//   return mailer
+//     .sendMail({ from: process.env.SMTP_USER, ...opts })
+//     .catch((err) =>
+//       console.error(`[MAIL] Failed to ${opts.to}: ${err.message}`),
+//     );
+// }
 
 // ════════════════════════════════════════════════════════════════════════════
 //  CRON — Reminder emails (runs every 15 min)
@@ -27,7 +28,7 @@ export function startReminderCron() {
     try {
       // 24-hour reminders (sent in a ±15 min window around the 24h mark)
       const due24h = await pool.query(`
-        SELECT b.*, et.name AS event_name, et.custom_reminder_template
+        SELECT b.*, et.name AS event_name, et.custom_reminder_template, et.clinic_email
         FROM bookings b
         JOIN event_types et ON et.id = b.event_type_id
         WHERE b.reminder_24h = FALSE
@@ -49,24 +50,29 @@ export function startReminderCron() {
               .replace(/{{startTime}}/g, timeStr)
           : `Hello ${b.client_name},\n\nA reminder that your ${b.event_name} is tomorrow at ${timeStr}.\n\nSee you then!`;
 
-        await sendMail({
+        await sendMail(b.clinic_email, {
           to: b.client_email,
           subject: `Reminder: ${b.event_name} tomorrow`,
           text: body,
         });
 
         // Also notify clinic staff
-        const etRes = await pool.query(
-          "SELECT clinic_email FROM event_types WHERE id = $1",
-          [b.event_type_id],
-        );
-        if (etRes.rowCount > 0) {
-          await sendMail({
-            to: etRes.rows[0].clinic_email,
-            subject: `Reminder: ${b.client_name} — ${b.event_name} tomorrow`,
-            text: `${b.client_name}'s ${b.event_name} is tomorrow at ${timeStr}.`,
-          });
-        }
+        // const etRes = await pool.query(
+        //   "SELECT clinic_email FROM event_types WHERE id = $1",
+        //   [b.event_type_id],
+        // );
+        // if (etRes.rowCount > 0) {
+        //   await sendMail({
+        //     to: etRes.rows[0].clinic_email,
+        //     subject: `Reminder: ${b.client_name} — ${b.event_name} tomorrow`,
+        //     text: `${b.client_name}'s ${b.event_name} is tomorrow at ${timeStr}.`,
+        //   });
+        // }
+        await sendMail(b.clinic_email, {
+          to: b.clinic_email,
+          subject: `Reminder: ${b.client_name} — ${b.event_name} tomorrow`,
+          text: `${b.client_name}'s ${b.event_name} is tomorrow at ${timeStr}.`,
+        });
 
         await pool.query(
           "UPDATE bookings SET reminder_24h = TRUE WHERE id = $1",
@@ -76,7 +82,7 @@ export function startReminderCron() {
 
       // 1-hour reminders
       const due1h = await pool.query(`
-        SELECT b.*, et.name AS event_name
+        SELECT b.*, et.name AS event_name, et.clinic_email
         FROM bookings b
         JOIN event_types et ON et.id = b.event_type_id
         WHERE b.reminder_1h = FALSE

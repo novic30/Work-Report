@@ -2,7 +2,8 @@ import { Router } from "express";
 import { google } from "googleapis";
 import crypto from "crypto";
 import pool from "../db.js";
-import { getCalendarClient, sendMail } from "./bookings.js";
+import { getCalendarClient } from "./bookings.js";
+import { sendMail } from "../mail.js";
 
 const router = Router();
 
@@ -310,7 +311,7 @@ router.post("/:clinicSlug/:eventSlug/book", async (req, res) => {
     const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
     const cancelUrl = `${frontendUrl}/cancel/${cancelToken}`;
 
-    await sendMail({
+    await sendMail(et.clinic_email, {
       to: clientEmail,
       subject: `Confirmed: ${et.name}`,
       text:
@@ -334,7 +335,7 @@ router.post("/:clinicSlug/:eventSlug/book", async (req, res) => {
     });
 
     // Notification → clinic
-    await sendMail({
+    await sendMail(et.clinic_email, {
       to: et.clinic_email,
       subject: `New booking: ${clientName} — ${et.name}`,
       text:
@@ -362,7 +363,9 @@ router.get("/cancel/:cancelToken", async (req, res) => {
       [cancelToken],
     );
     if (booking.rowCount === 0)
-      return res.status(404).json({ error: "Booking not found or already cancelled." });
+      return res
+        .status(404)
+        .json({ error: "Booking not found or already cancelled." });
 
     const b = booking.rows[0];
 
@@ -388,14 +391,14 @@ router.get("/cancel/:cancelToken", async (req, res) => {
     ]);
 
     // Notify client
-    await sendMail({
+    await sendMail(et.clinic_email, {
       to: b.client_email,
       subject: `Booking cancelled: ${b.event_name}`,
       text: `Hello ${b.client_name},\n\nYour appointment on ${new Date(b.start_time).toLocaleString()} has been cancelled.\n\nPlease get in touch to reschedule.`,
     });
 
     // Notify clinic
-    await sendMail({
+    await sendMail(b.clinic_email, {
       to: b.clinic_email,
       subject: `Cancellation: ${b.client_name} — ${b.event_name}`,
       text: `${b.client_name} cancelled their ${b.event_name} on ${new Date(b.start_time).toLocaleString()}.`,

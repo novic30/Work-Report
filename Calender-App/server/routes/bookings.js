@@ -1,28 +1,29 @@
 import { Router } from "express";
 import { google } from "googleapis";
 import crypto from "crypto";
-import nodemailer from "nodemailer";
+import { sendMail } from "../mail.js";
 import pool from "../db.js";
 import { requireAuth } from "../middleware/auth.js";
 
 const router = Router();
 
 // ── Mail helper ─────────────────────────────────────────────────────────────
-const mailer = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASSWORD,
-  },
-});
 
-async function sendMail(opts) {
-  return mailer
-    .sendMail({ from: process.env.SMTP_USER, ...opts })
-    .catch((err) =>
-      console.error(`[MAIL] Failed to ${opts.to}: ${err.message}`),
-    );
-}
+// const mailer = nodemailer.createTransport({
+//   service: "gmail",
+//   auth: {
+//     user: process.env.SMTP_USER,
+//     pass: process.env.SMTP_PASSWORD,
+//   },
+// });
+
+// async function sendMail(opts) {
+//   return mailer
+//     .sendMail({ from: process.env.SMTP_USER, ...opts })
+//     .catch((err) =>
+//       console.error(`[MAIL] Failed to ${opts.to}: ${err.message}`),
+//     );
+// }
 
 // ── Google Calendar helper ──────────────────────────────────────────────────
 async function getCalendarClient(clinicEmail) {
@@ -158,7 +159,7 @@ router.delete("/:id", requireAuth, async (req, res) => {
     ]);
 
     // Notify client of cancellation
-    await sendMail({
+    await sendMail(b.clinic_email, {
       to: b.client_email,
       subject: `Booking cancelled: ${b.event_name}`,
       text: `Hello ${b.client_name},\n\nYour appointment on ${new Date(b.start_time).toLocaleString()} has been cancelled.\n\nPlease get in touch to reschedule.`,
