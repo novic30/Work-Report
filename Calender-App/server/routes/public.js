@@ -185,7 +185,7 @@ router.post("/:clinicSlug/:eventSlug/slots", async (req, res) => {
       const end = t + slotMs;
       const blocked = busy.some((b) => t < b.end && end > b.start);
       if (!blocked) {
-        slots.push(DateTime.fromMillis(t, { zone: userTz }), toFormat("HH:mm"));
+        slots.push(DateTime.fromMillis(t, { zone: userTz }).toFormat("HH:mm"));
       }
     }
 
@@ -397,7 +397,7 @@ router.get("/cancel/:cancelToken", async (req, res) => {
 
     const b = booking.rows[0];
     const cancelTz = b.clinic_timezone || "America/Chicago";
-    const cancelTimeStr = DateTime.fromJSODate(new Date(b.start_time), {
+    const cancelTimeStr = DateTime.fromJSDate(new Date(b.start_time), {
       zone: "utc",
     })
       .setZone(cancelTz)

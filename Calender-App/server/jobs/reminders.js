@@ -121,7 +121,7 @@ export function startReminderCron() {
           );
         }
       } catch (err) {
-        console.error(`[CRON] Failed 1h remind for booking #${b.id}: `, err);
+        console.error(`[CRON] Failed 1h remind for booking: `, err);
       }
     } catch (err) {
       console.error(`[CRON] Reminder sweep failed:`, err);

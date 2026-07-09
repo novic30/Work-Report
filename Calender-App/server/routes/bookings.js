@@ -89,6 +89,7 @@ router.get("/stats", requireAuth, async (req, res) => {
        AND b.start_time >= NOW()`,
       [req.clinic.email],
     );
+    const clinicTz = req.clinic.timezone || "America/Chicago";
     const today = await pool.query(
       `SELECT COUNT(*) FROM bookings b
        JOIN event_types et ON et.id = b.event_type_id
@@ -126,9 +127,10 @@ router.get("/stats", requireAuth, async (req, res) => {
 router.delete("/:id", requireAuth, async (req, res) => {
   try {
     const booking = await pool.query(
-      `SELECT b.*, et.clinic_email, et.google_calendar_id, et.name AS event_name
+      `SELECT b.*, et.clinic_email, et.google_calendar_id, et.name AS event_name, gc.timezone AS clinic_timezone
        FROM bookings b
        JOIN event_types et ON et.id = b.event_type_id
+       JOIN google_credentials gc ON gc.email = et.clinic_email
        WHERE b.id = $1 AND et.clinic_email = $2`,
       [req.params.id, req.clinic.email],
     );
@@ -137,7 +139,7 @@ router.delete("/:id", requireAuth, async (req, res) => {
 
     const b = booking.rows[0];
     const cancelTz = b.clinic_timezone || "America/Chicago";
-    const cancelTimeStr = DateTime.fromJSODate(new Date(b.start_time), {
+    const cancelTimeStr = DateTime.fromJSDate(new Date(b.start_time), {
       zone: "utc",
     })
       .setZone(cancelTz)
