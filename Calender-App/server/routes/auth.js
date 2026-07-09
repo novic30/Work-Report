@@ -17,7 +17,6 @@ const SCOPES = [
   "https://www.googleapis.com/auth/calendar",
   "https://www.googleapis.com/auth/userinfo.email",
   "https://www.googleapis.com/auth/userinfo.profile",
-  "https://www.googleapis.com/auth/gmail.send",
 ];
 
 // Temporary in-memory store for pending auth claims.
@@ -51,7 +50,7 @@ router.get("/api/auth/callback", async (req, res) => {
     const { email, name } = userInfo;
 
     const existing = await pool.query(
-      "SELECT slug, refresh_token FROM google_credentials WHERE email = $1",
+      "SELECT slug, refresh_token, timezone FROM google_credentials WHERE email = $1",
       [email],
     );
 

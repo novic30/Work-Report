@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { google } from "googleapis";
-import crypto from "crypto";
 import { sendMail } from "../mail.js";
 import pool from "../db.js";
 import { requireAuth } from "../middleware/auth.js";
+import { DateTime } from "luxon";
 
 const router = Router();
 
@@ -93,8 +93,8 @@ router.get("/stats", requireAuth, async (req, res) => {
       `SELECT COUNT(*) FROM bookings b
        JOIN event_types et ON et.id = b.event_type_id
        WHERE et.clinic_email = $1 AND b.status = 'confirmed'
-       AND b.start_time::date = CURRENT_DATE`,
-      [req.clinic.email],
+       AND (b.start_time AT TIME ZONE $2)::date = CURRENT_DATE`,
+      [req.clinic.email, clinicTz],
     );
     const total = await pool.query(
       `SELECT COUNT(*) FROM bookings b
@@ -136,6 +136,12 @@ router.delete("/:id", requireAuth, async (req, res) => {
       return res.status(404).json({ error: "Booking not found." });
 
     const b = booking.rows[0];
+    const cancelTz = b.clinic_timezone || "America/Chicago";
+    const cancelTimeStr = DateTime.fromJSODate(new Date(b.start_time), {
+      zone: "utc",
+    })
+      .setZone(cancelTz)
+      .toFormat("yyyy-MM-dd HH:mm");
 
     // Remove from Google Calendar
     if (b.google_event_id) {
@@ -163,7 +169,7 @@ router.delete("/:id", requireAuth, async (req, res) => {
       await sendMail(b.clinic_email, {
         to: b.client_email,
         subject: `Booking cancelled: ${b.event_name}`,
-        text: `Hello ${b.client_name},\n\nYour appointment on ${new Date(b.start_time).toLocaleString()} has been cancelled.\n\nPlease get in touch to reschedule.`,
+        text: `Hello ${b.client_name},\n\nYour appointment on ${cancelTimeStr} (${cancelTz}) has been cancelled.\n\nPlease get in touch to reschedule.`,
       });
     } catch (mailErr) {
       console.log(
@@ -179,4 +185,4 @@ router.delete("/:id", requireAuth, async (req, res) => {
 });
 
 export default router;
-export { getCalendarClient, sendMail };
+export { getCalendarClient };

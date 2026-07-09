@@ -63,7 +63,7 @@ const SCHEMA = `
     reminder_24h    BOOLEAN DEFAULT FALSE,
     reminder_1h     BOOLEAN DEFAULT FALSE,
     cancel_token    VARCHAR(255) UNIQUE,
-    created_at      TIMESTAMP DEFAULT NOW()
+    created_at      TIMESTAMPTZ DEFAULT NOW()
   );
 
   -- Add columns if they don't exist (for upgrades from the old schema)

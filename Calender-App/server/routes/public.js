@@ -141,11 +141,11 @@ router.post("/:clinicSlug/:eventSlug/slots", async (req, res) => {
     // Collect busy intervals
     const busy = [];
 
-    // 1. From our own bookings table
+    // 1. From our own bookings table (according to clinic timeone)
     const localBusy = await pool.query(
       `SELECT start_time, end_time FROM bookings
-       WHERE event_type_id = $1 AND status = 'confirmed' AND start_time::date = $2`,
-      [et.id, date],
+       WHERE event_type_id = $1 AND status = 'confirmed' AND (start_time AT TIME ZONE $3)::date = $2`,
+      [et.id, date, clinicTz],
     );
     localBusy.rows.forEach((b) => {
       // Include buffer time around each booking
@@ -185,17 +185,16 @@ router.post("/:clinicSlug/:eventSlug/slots", async (req, res) => {
       const end = t + slotMs;
       const blocked = busy.some((b) => t < b.end && end > b.start);
       if (!blocked) {
-        slots.push(
-          new Date(t).toLocaleTimeString("en-US", {
-            hour: "2-digit",
-            minute: "2-digit",
-            hour12: false,
-          }),
-        );
+        slots.push(DateTime.fromMillis(t, { zone: userTz }), toFormat("HH:mm"));
       }
     }
 
-    res.json({ date, slots, durationMinutes: et.slot_duration_minutes });
+    res.json({
+      date,
+      slots,
+      durationMinutes: et.slot_duration_minutes,
+      timezone: userTz,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to compute available slots." });
@@ -336,7 +335,7 @@ router.post("/:clinicSlug/:eventSlug/book", async (req, res) => {
         subject: `Confirmed: ${et.name}`,
         text:
           `Hello ${clientName},\n\nYour booking is confirmed!\n\n` +
-          `${et.name}\n${date} at ${time} (${et.slot_duration_minutes} min)\n\n` +
+          `${et.name}\n${date} at ${time} (${userTz}) (${et.slot_duration_minutes} min)\n\n` +
           `You'll receive reminders 24 hours and 1 hour before your appointment.\n\n` +
           `To cancel: ${cancelUrl}\n\nSee you soon!`,
         html: `
@@ -384,9 +383,10 @@ router.get("/cancel/:cancelToken", async (req, res) => {
   const { cancelToken } = req.params;
   try {
     const booking = await pool.query(
-      `SELECT b.*, et.clinic_email, et.google_calendar_id, et.name AS event_name
+      `SELECT b.*, et.clinic_email, et.google_calendar_id, et.name AS event_name, gc.timezone AS clinic_timezone
        FROM bookings b
        JOIN event_types et ON et.id = b.event_type_id
+       JOIN google_credentials gc ON gc.email = et.clinic_email
        WHERE b.cancel_token = $1 AND b.status = 'confirmed'`,
       [cancelToken],
     );
@@ -396,6 +396,12 @@ router.get("/cancel/:cancelToken", async (req, res) => {
         .json({ error: "Booking not found or already cancelled." });
 
     const b = booking.rows[0];
+    const cancelTz = b.clinic_timezone || "America/Chicago";
+    const cancelTimeStr = DateTime.fromJSODate(new Date(b.start_time), {
+      zone: "utc",
+    })
+      .setZone(cancelTz)
+      .toFormat("yyyy-MM-dd HH:mm");
 
     // Remove from Google Calendar
     if (b.google_event_id) {
@@ -423,14 +429,14 @@ router.get("/cancel/:cancelToken", async (req, res) => {
       await sendMail(b.clinic_email, {
         to: b.client_email,
         subject: `Booking cancelled: ${b.event_name}`,
-        text: `Hello ${b.client_name},\n\nYour appointment on ${new Date(b.start_time).toLocaleString()} has been cancelled.\n\nPlease get in touch to reschedule.`,
+        text: `Hello ${b.client_name},\n\nYour appointment on ${cancelTimeStr} (${cancelTz}) has been cancelled.\n\nPlease get in touch to reschedule.`,
       });
 
       // Notify clinic
       await sendMail(b.clinic_email, {
         to: b.clinic_email,
         subject: `Cancellation: ${b.client_name} — ${b.event_name}`,
-        text: `${b.client_name} cancelled their ${b.event_name} on ${new Date(b.start_time).toLocaleString()}.`,
+        text: `${b.client_name} cancelled their ${b.event_name} on ${cancelTimeStr} (${cancelTz}).`,
       });
     } catch (mailErr) {
       console.log(

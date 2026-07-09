@@ -187,7 +187,10 @@ app.get("/api/auth/callback", async (req, res) => {
 
     // Create a short-lived claim token (one-time use, expires in 5 min)
     const claimToken = crypto.randomBytes(32).toString("hex");
-    authClaims.set(claimToken, { token: apiToken, user: { email, name, slug } });
+    authClaims.set(claimToken, {
+      token: apiToken,
+      user: { email, name, slug },
+    });
     setTimeout(() => authClaims.delete(claimToken), 5 * 60 * 1000);
 
     // Redirect the browser to the frontend's callback page
@@ -405,7 +408,9 @@ app.put("/api/event-types/:id/availability", requireAuth, async (req, res) => {
     if (check.rowCount === 0)
       return res.status(404).json({ error: "Event type not found." });
 
-    await pool.query("DELETE FROM availabilities WHERE event_type_id = $1", [id]);
+    await pool.query("DELETE FROM availabilities WHERE event_type_id = $1", [
+      id,
+    ]);
 
     for (const a of availability) {
       await pool.query(
@@ -488,7 +493,9 @@ app.delete("/api/bookings/:id", requireAuth, async (req, res) => {
       }
     }
 
-    await pool.query("UPDATE bookings SET status = 'cancelled' WHERE id = $1", [b.id]);
+    await pool.query("UPDATE bookings SET status = 'cancelled' WHERE id = $1", [
+      b.id,
+    ]);
 
     await sendMail({
       to: b.client_email,
@@ -557,7 +564,11 @@ app.post("/api/public/:clinicSlug/:eventSlug/slots", async (req, res) => {
       [et.id, dayOfWeek],
     );
     if (availRes.rowCount === 0) {
-      return res.json({ date, slots: [], message: "No availability on this day." });
+      return res.json({
+        date,
+        slots: [],
+        message: "No availability on this day.",
+      });
     }
 
     const { start_time, end_time } = availRes.rows[0];
@@ -565,7 +576,11 @@ app.post("/api/public/:clinicSlug/:eventSlug/slots", async (req, res) => {
     const windowEnd = new Date(`${date}T${end_time}`).getTime();
 
     if (windowEnd < now + leadMs) {
-      return res.json({ date, slots: [], message: "Date is within lead time restriction." });
+      return res.json({
+        date,
+        slots: [],
+        message: "Date is within lead time restriction.",
+      });
     }
 
     const busy = [];
@@ -576,7 +591,10 @@ app.post("/api/public/:clinicSlug/:eventSlug/slots", async (req, res) => {
       [et.id, date],
     );
     localBusy.rows.forEach((b) =>
-      busy.push({ start: new Date(b.start_time).getTime(), end: new Date(b.end_time).getTime() }),
+      busy.push({
+        start: new Date(b.start_time).getTime(),
+        end: new Date(b.end_time).getTime(),
+      }),
     );
 
     try {
@@ -594,7 +612,10 @@ app.post("/api/public/:clinicSlug/:eventSlug/slots", async (req, res) => {
       const gcalBusy =
         fbRes.data.calendars[et.google_calendar_id || "primary"].busy || [];
       gcalBusy.forEach((b) =>
-        busy.push({ start: new Date(b.start).getTime(), end: new Date(b.end).getTime() }),
+        busy.push({
+          start: new Date(b.start).getTime(),
+          end: new Date(b.end).getTime(),
+        }),
       );
     } catch (calErr) {
       console.warn("[GCal] Freebusy check failed:", calErr.message);
@@ -646,7 +667,9 @@ app.post("/api/public/:clinicSlug/:eventSlug/book", async (req, res) => {
 
     const et = etRes.rows[0];
     const startTime = new Date(`${date}T${time}:00`);
-    const endTime = new Date(startTime.getTime() + et.slot_duration_minutes * 60_000);
+    const endTime = new Date(
+      startTime.getTime() + et.slot_duration_minutes * 60_000,
+    );
 
     const localConflict = await pool.query(
       `SELECT id FROM bookings
@@ -655,11 +678,18 @@ app.post("/api/public/:clinicSlug/:eventSlug/book", async (req, res) => {
       [et.id, endTime, startTime],
     );
     if (localConflict.rowCount > 0) {
-      return res.status(409).json({ error: "This slot was just taken. Please choose another time." });
+      return res
+        .status(409)
+        .json({
+          error: "This slot was just taken. Please choose another time.",
+        });
     }
 
     try {
-      const cal = google.calendar({ version: "v3", auth: await getCalendarClient(et.clinic_email) });
+      const cal = google.calendar({
+        version: "v3",
+        auth: await getCalendarClient(et.clinic_email),
+      });
       const fbRes = await cal.freebusy.query({
         requestBody: {
           timeMin: startTime.toISOString(),
@@ -667,9 +697,14 @@ app.post("/api/public/:clinicSlug/:eventSlug/book", async (req, res) => {
           items: [{ id: et.google_calendar_id || "primary" }],
         },
       });
-      const gcalBusy = fbRes.data.calendars[et.google_calendar_id || "primary"].busy || [];
+      const gcalBusy =
+        fbRes.data.calendars[et.google_calendar_id || "primary"].busy || [];
       if (gcalBusy.length > 0) {
-        return res.status(409).json({ error: "This time conflicts with an existing calendar event." });
+        return res
+          .status(409)
+          .json({
+            error: "This time conflicts with an existing calendar event.",
+          });
       }
     } catch (calErr) {
       console.warn("[GCal] Pre-book conflict check failed:", calErr.message);
@@ -677,7 +712,10 @@ app.post("/api/public/:clinicSlug/:eventSlug/book", async (req, res) => {
 
     let googleEventId = null;
     try {
-      const cal = google.calendar({ version: "v3", auth: await getCalendarClient(et.clinic_email) });
+      const cal = google.calendar({
+        version: "v3",
+        auth: await getCalendarClient(et.clinic_email),
+      });
       const event = await cal.events.insert({
         calendarId: et.google_calendar_id || "primary",
         sendUpdates: "all",
@@ -748,13 +786,23 @@ cron.schedule("*/15 * * * *", async () => {
             .replace(/{{eventName}}/g, b.event_name)
             .replace(
               /{{startTime}}/g,
-              new Date(b.start_time).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+              new Date(b.start_time).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              }),
             )
         : `Hello ${b.client_name},\n\nA reminder that your ${b.event_name} is tomorrow at ` +
           `${new Date(b.start_time).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}.\n\nSee you then!`;
 
-      await sendMail({ to: b.client_email, subject: `Reminder: ${b.event_name} tomorrow`, text: body });
-      await pool.query("UPDATE bookings SET reminder_24h = TRUE WHERE id = $1", [b.id]);
+      await sendMail({
+        to: b.client_email,
+        subject: `Reminder: ${b.event_name} tomorrow`,
+        text: body,
+      });
+      await pool.query(
+        "UPDATE bookings SET reminder_24h = TRUE WHERE id = $1",
+        [b.id],
+      );
     }
 
     const due1h = await pool.query(`
@@ -773,13 +821,17 @@ cron.schedule("*/15 * * * *", async () => {
         subject: `Starting soon: ${b.event_name}`,
         text: `Hello ${b.client_name},\n\nYour ${b.event_name} starts in about 1 hour. See you soon!`,
       });
-      await pool.query("UPDATE bookings SET reminder_1h = TRUE WHERE id = $1", [b.id]);
+      await pool.query("UPDATE bookings SET reminder_1h = TRUE WHERE id = $1", [
+        b.id,
+      ]);
     }
   } catch (err) {
     console.error("[CRON] Reminder sweep failed:", err);
   }
 });
 
-app.get("/api/health", (_, res) => res.json({ status: "ok", ts: new Date().toISOString() }));
+app.get("/api/health", (_, res) =>
+  res.json({ status: "ok", ts: new Date().toISOString() }),
+);
 
 app.listen(PORT, () => console.log(`[SERVER] Running on port ${PORT}`));

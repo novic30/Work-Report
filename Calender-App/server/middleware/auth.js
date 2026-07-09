@@ -12,7 +12,7 @@ export async function requireAuth(req, res, next) {
   const token = header.slice(7);
   const result = await pool
     .query(
-      "SELECT email, name, slug FROM google_credentials WHERE api_token = $1",
+      "SELECT email, name, slug, timezone FROM google_credentials WHERE api_token = $1",
       [token],
     )
     .catch(() => null);
