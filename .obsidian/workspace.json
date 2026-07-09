@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Financial Knowledge/Banks.md",
+                "file": "Security USCC/Web CTF.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Banks"
+              "title": "Web CTF"
             }
           }
         ]
@@ -53,7 +53,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "email",
+                "query": "web ctf",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -79,7 +79,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "right": {
     "id": "52b23d32bf3406df",
@@ -187,6 +188,9 @@
   },
   "active": "e38a960df3fc0f9b",
   "lastOpenFiles": [
+    "Calender-App/_tmp_34748_65faacd2efef3d71bb7a3a28116d7086",
+    "Calender-App/frontend/_tmp_500_e601d39833bfb6aaaca410a6890c0bb2",
+    "Financial Knowledge/Banks.md",
     "Calender-App/server/routes/public.js",
     "Calender-App/server/routes/eventTypes.js",
     "Calender-App/server/routes/bookings.js",
@@ -196,10 +200,7 @@
     "Calender-App/server/middleware/auth.js",
     "Calender-App/server/middleware",
     "Calender-App/server/jobs/reminders.js",
-    "Calender-App/server/jobs",
-    "Calender-App/server/index.js",
     "Financial Knowledge/Spending Plan or Budgeting.md",
-    "Financial Knowledge/Banks.md",
     "Security USCC/Web CTF.md",
     "WebSockets/WebSocket.md",
     "WebSockets/WebSocket/node_modules/vary/HISTORY.md",
