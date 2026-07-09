@@ -4,6 +4,7 @@ import crypto from "crypto";
 import pool from "../db.js";
 import { getCalendarClient } from "./bookings.js";
 import { sendMail } from "../mail.js";
+import { DateTime } from "luxon";
 
 const router = Router();
 
@@ -67,16 +68,16 @@ router.get("/:clinicSlug/:eventSlug", async (req, res) => {
 
 // Get available slots for a given date
 // POST /api/public/:clinicSlug/:eventSlug/slots
-// Body: { date: "YYYY-MM-DD" }
+// Body: { date: "YYYY-MM-DD" , timezone?: "America/Los_Angeles"}
 router.post("/:clinicSlug/:eventSlug/slots", async (req, res) => {
   const { clinicSlug, eventSlug } = req.params;
-  const { date } = req.body;
+  const { date, timezone } = req.body;
   if (!date)
     return res.status(400).json({ error: "date (YYYY-MM-DD) is required." });
 
   try {
     const etRes = await pool.query(
-      `SELECT et.*, gc.email AS clinic_email
+      `SELECT et.*, gc.email AS clinic_email, gc.timezone AS clinic_timezone
        FROM event_types et
        JOIN google_credentials gc ON gc.email = et.clinic_email
        WHERE gc.slug = $1 AND et.slug = $2 AND et.is_active = TRUE`,
@@ -87,15 +88,17 @@ router.post("/:clinicSlug/:eventSlug/slots", async (req, res) => {
 
     const et = etRes.rows[0];
     const slotMs = et.slot_duration_minutes * 60_000;
+    const clinicTz = et.clinic_timezone || "America/Chicago";
+    const userTz = timezone || clinicTz;
     const stepMs = et.step_minutes * 60_000;
     const leadMs = et.lead_time_hours * 3_600_000;
     const bufferMs = (et.buffer_time_minutes || 0) * 60_000;
     const maxAdvanceMs = (et.max_advance_days || 30) * 86_400_000;
     const now = Date.now();
 
-    // Check max advance booking window
-    const dateMs = new Date(`${date}T00:00:00`).getTime();
-    if (dateMs > now + maxAdvanceMs) {
+    // Check max advance booking window (in clinic timezone)
+    const dateStart = DateTime.fromISO(date, { zone: clinicTz }).startOf("day");
+    if (dateStart.toMillis() > now + maxAdvanceMs) {
       return res.json({
         date,
         slots: [],
@@ -103,8 +106,8 @@ router.post("/:clinicSlug/:eventSlug/slots", async (req, res) => {
       });
     }
 
-    // Day-of-week check
-    const dayOfWeek = new Date(`${date}T00:00:00`).getDay();
+    // Day-of-week check (in clinic timezone)
+    const dayOfWeek = dateStart.weekday % 7;
     const availRes = await pool.query(
       "SELECT start_time, end_time FROM availabilities WHERE event_type_id = $1 AND day_of_week = $2",
       [et.id, dayOfWeek],
@@ -118,8 +121,14 @@ router.post("/:clinicSlug/:eventSlug/slots", async (req, res) => {
     }
 
     const { start_time, end_time } = availRes.rows[0];
-    const windowStart = new Date(`${date}T${start_time}`).getTime();
-    const windowEnd = new Date(`${date}T${end_time}`).getTime();
+    const startStr = String(start_time).substring(0, 5);
+    const endStr = String(end_time).substring(0, 5);
+    const windowStart = DateTime.fromISO(`${date}T${startStr}`, {
+      zone: clinicTz,
+    }).toMillis();
+    const windowEnd = DateTime.fromISO(`${date}T${endStr}`, {
+      zone: clinicTz,
+    }).toMillis();
 
     if (windowEnd < now + leadMs) {
       return res.json({
@@ -195,11 +204,18 @@ router.post("/:clinicSlug/:eventSlug/slots", async (req, res) => {
 
 // Create a booking (the form submit from the client's booking page)
 // POST /api/public/:clinicSlug/:eventSlug/book
-// Body: { clientName, clientEmail, clientPhone?, date, time, customAnswers? }
+// Body: { clientName, clientEmail, clientPhone?, date, time, timezone?, customAnswers? }
 router.post("/:clinicSlug/:eventSlug/book", async (req, res) => {
   const { clinicSlug, eventSlug } = req.params;
-  const { clientName, clientEmail, clientPhone, date, time, customAnswers } =
-    req.body;
+  const {
+    clientName,
+    clientEmail,
+    clientPhone,
+    date,
+    time,
+    timezone,
+    customAnswers,
+  } = req.body;
 
   if (!clientName || !clientEmail || !date || !time) {
     return res
@@ -209,7 +225,7 @@ router.post("/:clinicSlug/:eventSlug/book", async (req, res) => {
 
   try {
     const etRes = await pool.query(
-      `SELECT et.*, gc.email AS clinic_email, gc.name AS clinic_name
+      `SELECT et.*, gc.email AS clinic_email, gc.name AS clinic_name, gc.timezone AS clinic_timezone
        FROM event_types et
        JOIN google_credentials gc ON gc.email = et.clinic_email
        WHERE gc.slug = $1 AND et.slug = $2 AND et.is_active = TRUE`,
@@ -219,10 +235,14 @@ router.post("/:clinicSlug/:eventSlug/book", async (req, res) => {
       return res.status(404).json({ error: "Not found." });
 
     const et = etRes.rows[0];
-    const startTime = new Date(`${date}T${time}:00`);
-    const endTime = new Date(
-      startTime.getTime() + et.slot_duration_minutes * 60_000,
-    );
+    const clinicTz = et.clinic_timezone || "America/Chicago";
+    const userTz = timezone || clinicTz;
+    const startTime = DateTime.fromISO(`${date}T${time}:00`, {
+      zone: userTz,
+    }).toJSDate();
+    const endTime = DateTime.fromJSDate(startTime)
+      .plus({ minutes: et.slot_duration_minutes })
+      .toJSDate();
 
     // ── Double-booking guard ─────────────────────────────────────────────
     const localConflict = await pool.query(
@@ -274,8 +294,8 @@ router.post("/:clinicSlug/:eventSlug/book", async (req, res) => {
         requestBody: {
           summary: `${et.name}: ${clientName}`,
           description: `${et.slot_duration_minutes}-min appointment. Client: ${clientEmail}${clientPhone ? `\nPhone: ${clientPhone}` : ""}`,
-          start: { dateTime: startTime.toISOString() },
-          end: { dateTime: endTime.toISOString() },
+          start: { dateTime: startTime.toISOString(), timeZone: "UTC" },
+          end: { dateTime: endTime.toISOString(), timeZone: "UTC" },
           attendees: [{ email: clientEmail }, { email: et.clinic_email }],
         },
       });
@@ -400,7 +420,7 @@ router.get("/cancel/:cancelToken", async (req, res) => {
 
     // Notify client
     try {
-      await sendMail(et.clinic_email, {
+      await sendMail(b.clinic_email, {
         to: b.client_email,
         subject: `Booking cancelled: ${b.event_name}`,
         text: `Hello ${b.client_name},\n\nYour appointment on ${new Date(b.start_time).toLocaleString()} has been cancelled.\n\nPlease get in touch to reschedule.`,
