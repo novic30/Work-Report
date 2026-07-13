@@ -378,9 +378,11 @@ router.post("/:clinicSlug/:eventSlug/book", async (req, res) => {
 });
 
 // Cancel a booking via cancel token (public, no auth)
+// MUST be before /:clinicSlug routes – Express matches in order
 // GET /api/public/cancel/:cancelToken
 router.get("/cancel/:cancelToken", async (req, res) => {
   const { cancelToken } = req.params;
+
   try {
     const booking = await pool.query(
       `SELECT b.*, et.clinic_email, et.google_calendar_id, et.name AS event_name, gc.timezone AS clinic_timezone
@@ -390,6 +392,7 @@ router.get("/cancel/:cancelToken", async (req, res) => {
        WHERE b.cancel_token = $1 AND b.status = 'confirmed'`,
       [cancelToken],
     );
+
     if (booking.rowCount === 0)
       return res
         .status(404)
@@ -410,6 +413,7 @@ router.get("/cancel/:cancelToken", async (req, res) => {
           version: "v3",
           auth: await getCalendarClient(b.clinic_email),
         });
+
         await cal.events.delete({
           calendarId: b.google_calendar_id || "primary",
           eventId: b.google_event_id,
@@ -435,15 +439,13 @@ router.get("/cancel/:cancelToken", async (req, res) => {
       // Notify clinic
       await sendMail(b.clinic_email, {
         to: b.clinic_email,
-        subject: `Cancellation: ${b.client_name} — ${b.event_name}`,
+        subject: `Cancellation: ${b.client_name} – ${b.event_name}`,
         text: `${b.client_name} cancelled their ${b.event_name} on ${cancelTimeStr} (${cancelTz}).`,
       });
     } catch (mailErr) {
-      console.log(
-        "[MAIL] Confirmation email failed but Booking Still Created: ",
-        mailErr.message,
-      );
+      console.log("[MAIL] Cancellation email failed:", mailErr.message);
     }
+
     res.json({ success: true, message: "Booking cancelled." });
   } catch (err) {
     console.error(err);
