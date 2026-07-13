@@ -1,9 +1,9 @@
-import { Navigate } from 'react-router-dom';
-import { useAuth } from '../lib/auth';
-import type { ReactNode } from 'react';
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../lib/auth";
+import type { ReactNode } from "react";
 
 export function RequireAuth({ children }: { children: ReactNode }) {
-  const { user, loading } = useAuth();
+  const { user, token, loading } = useAuth();
 
   if (loading) {
     return (
@@ -13,7 +13,7 @@ export function RequireAuth({ children }: { children: ReactNode }) {
     );
   }
 
-  if (!user) {
+  if (!user && !token) {
     return <Navigate to="/login" replace />;
   }
 
