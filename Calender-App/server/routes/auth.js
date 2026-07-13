@@ -110,7 +110,7 @@ router.get("/api/auth/callback", async (req, res) => {
       token: apiToken,
       user: { email, name, slug },
     });
-    setTimeout(() => authClaims.delete(claimToken), 2 * 60 * 1000);
+    setTimeout(() => authClaims.delete(claimToken), 10 * 60 * 1000);
 
     // Redirect the browser to the frontend's callback page
     const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
