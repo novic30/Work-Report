@@ -45,6 +45,11 @@ export function startReminderCron() {
           })
             .setZone(clinicTz)
             .toFormat("HH:mm");
+
+          const notesText = b.meeting_notes
+            ? `\n\nNotes provided:\n${b.meeting_notes}`
+            : "";
+
           const body = b.custom_reminder_template
             ? b.custom_reminder_template
                 .replace(/{{clientName}}/g, b.client_name)
@@ -55,7 +60,7 @@ export function startReminderCron() {
           await sendMail(b.clinic_email, {
             to: b.client_email,
             subject: `Reminder: ${b.event_name} tomorrow`,
-            text: body,
+            text: body + notesText,
           });
 
           // Also notify clinic staff
@@ -73,7 +78,7 @@ export function startReminderCron() {
           await sendMail(b.clinic_email, {
             to: b.clinic_email,
             subject: `Reminder: ${b.client_name} — ${b.event_name} tomorrow`,
-            text: `${b.client_name}'s ${b.event_name} is tomorrow at ${timeStr}.`,
+            text: `${b.client_name}'s ${b.event_name} is tomorrow at ${timeStr}. ${notesText}`,
           });
 
           await pool.query(
@@ -98,21 +103,20 @@ export function startReminderCron() {
       `);
 
         for (const b of due1h.rows) {
+          const notesText = b.meeting_notes
+            ? `\n\nNotes provided:\n${b.meeting_notes}`
+            : "";
+
           await sendMail(b.clinic_email, {
             to: b.client_email,
             subject: `Starting soon: ${b.event_name}`,
-            text: `Hello ${b.client_name},\n\nYour ${b.event_name} starts in about 1 hour. See you soon!`,
+            text: `Hello ${b.client_name},\n\nYour ${b.event_name} starts in about 1 hour. See you soon! ${notesText}`,
           });
 
-          // Notify clinic staff
-          // const etRes = await pool.query(
-          //   "SELECT clinic_email FROM event_types WHERE id = $1",
-          //   [b.event_type_id],
-          // );
           await sendMail(b.clinic_email, {
             to: b.clinic_email,
             subject: `Starting soon: ${b.client_name} — ${b.event_name}`,
-            text: `${b.client_name}'s ${b.event_name} starts in about 1 hour.`,
+            text: `${b.client_name}'s ${b.event_name} starts in about 1 hour. ${notesText}`,
           });
 
           await pool.query(

@@ -203,7 +203,7 @@ router.post("/:clinicSlug/:eventSlug/slots", async (req, res) => {
 
 // Create a booking (the form submit from the client's booking page)
 // POST /api/public/:clinicSlug/:eventSlug/book
-// Body: { clientName, clientEmail, clientPhone?, date, time, timezone?, customAnswers? }
+// Body: { clientName, clientEmail, clientPhone?, meetingNotes?, date, time, timezone?, customAnswers? }
 router.post("/:clinicSlug/:eventSlug/book", async (req, res) => {
   const { clinicSlug, eventSlug } = req.params;
   const {
@@ -214,6 +214,7 @@ router.post("/:clinicSlug/:eventSlug/book", async (req, res) => {
     time,
     timezone,
     customAnswers,
+    meetingNotes,
   } = req.body;
 
   if (!clientName || !clientEmail || !date || !time) {
@@ -280,19 +281,28 @@ router.post("/:clinicSlug/:eventSlug/book", async (req, res) => {
     }
     // ────────────────────────────────────────────────────────────────────
 
-    // Create Google Calendar event
     let googleEventId = null;
     try {
       const cal = google.calendar({
         version: "v3",
         auth: await getCalendarClient(et.clinic_email),
       });
+
+      const description = [
+        `${et.slot_duration_minutes}-min appointment`,
+        `Client: ${clientEmail}`,
+        clientPhone ? `Phone: ${clientPhone}` : null,
+        meetingNotes ? `Notes:\n${meetingNotes}` : null,
+      ]
+        .filter(Boolean)
+        .join("\n\n");
+
       const event = await cal.events.insert({
         calendarId: et.google_calendar_id || "primary",
         sendUpdates: "all",
         requestBody: {
           summary: `${et.name}: ${clientName}`,
-          description: `${et.slot_duration_minutes}-min appointment. Client: ${clientEmail}${clientPhone ? `\nPhone: ${clientPhone}` : ""}`,
+          description,
           start: { dateTime: startTime.toISOString(), timeZone: "UTC" },
           end: { dateTime: endTime.toISOString(), timeZone: "UTC" },
           attendees: [{ email: clientEmail }, { email: et.clinic_email }],
@@ -309,8 +319,8 @@ router.post("/:clinicSlug/:eventSlug/book", async (req, res) => {
     // Persist booking
     const bookingRes = await pool.query(
       `INSERT INTO bookings (event_type_id, client_name, client_email, client_phone,
-         custom_answers, start_time, end_time, google_event_id, cancel_token)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
+         custom_answers, start_time, end_time, google_event_id, cancel_token, meeting_notes)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
        RETURNING id`,
       [
         et.id,
@@ -322,6 +332,7 @@ router.post("/:clinicSlug/:eventSlug/book", async (req, res) => {
         endTime,
         googleEventId,
         cancelToken,
+        meetingNotes || null,
       ],
     );
     const bookingId = bookingRes.rows[0].id;
@@ -336,6 +347,7 @@ router.post("/:clinicSlug/:eventSlug/book", async (req, res) => {
         text:
           `Hello ${clientName},\n\nYour booking is confirmed!\n\n` +
           `${et.name}\n${date} at ${time} (${userTz}) (${et.slot_duration_minutes} min)\n\n` +
+          (meetingNotes ? `Notes:\n${meetingNotes}\n\n` : "") +
           `You'll receive reminders 24 hours and 1 hour before your appointment.\n\n` +
           `To cancel: ${cancelUrl}\n\nSee you soon!`,
         html: `
@@ -360,7 +372,8 @@ router.post("/:clinicSlug/:eventSlug/book", async (req, res) => {
           subject: `New booking: ${clientName} — ${et.name}`,
           text:
             `New appointment booked.\n\nClient: ${clientName} (${clientEmail})\n` +
-            `Event: ${et.name}\nDate: ${date} at ${time}\nDuration: ${et.slot_duration_minutes} min`,
+            `Event: ${et.name}\nDate: ${date} at ${time}\nDuration: ${et.slot_duration_minutes} min\n` +
+            (meetingNotes ? `Notes:\n${meetingNotes}\n` : ""),
         });
       }
     } catch (mailErr) {

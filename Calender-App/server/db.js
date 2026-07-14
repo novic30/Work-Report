@@ -63,7 +63,8 @@ const SCHEMA = `
     reminder_24h    BOOLEAN DEFAULT FALSE,
     reminder_1h     BOOLEAN DEFAULT FALSE,
     cancel_token    VARCHAR(255) UNIQUE,
-    created_at      TIMESTAMPTZ DEFAULT NOW()
+    created_at      TIMESTAMPTZ DEFAULT NOW(),
+    meeting_notes   TEXT
   );
 
   -- Add columns if they don't exist (for upgrades from the old schema)
@@ -89,6 +90,10 @@ const SCHEMA = `
   END $$;
   DO $$ BEGIN
     ALTER TABLE bookings ADD COLUMN IF NOT EXISTS cancel_token VARCHAR(255) UNIQUE;
+  EXCEPTION WHEN duplicate_column THEN NULL;
+  END $$;
+  DO $$ BEGIN
+    ALTER TABLE bookings ADD COLUMN IF NOT EXISTS meeting_notes TEXT;
   EXCEPTION WHEN duplicate_column THEN NULL;
   END $$;
   DO $$ BEGIN
