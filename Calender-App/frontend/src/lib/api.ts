@@ -4,6 +4,7 @@
 // ════════════════════════════════════════════════════════════════════════════
 
 const BASE = ""; // Vite proxy handles /api → backend
+const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 function getToken(): string | null {
   return localStorage.getItem("cliniscal_token");
@@ -156,12 +157,12 @@ export function getPublicEventType(clinicSlug: string, eventSlug: string) {
   );
 }
 
-export function getSlots(clinicSlug: string, eventSlug: string, date: string) {
+export function getSlots(clinicSlug: string, eventSlug: string, date: string, timezone: string) {
   return request<import("../types").SlotResponse>(
     `/api/public/${clinicSlug}/${eventSlug}/slots`,
     {
       method: "POST",
-      body: JSON.stringify({ date }),
+      body: JSON.stringify({ date, timezone }),
     },
   );
 }
@@ -176,6 +177,7 @@ export function createBooking(
     meetingNotes?: string;
     date: string;
     time: string;
+    timezone?: string;
     customAnswers?: Record<string, string>;
   },
 ) {

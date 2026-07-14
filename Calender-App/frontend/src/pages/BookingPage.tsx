@@ -30,6 +30,11 @@ export function BookingPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const timezone = useMemo(
+    () => Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC",
+    [],
+  );
+
   // Calendar state
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
@@ -105,7 +110,7 @@ export function BookingPage() {
     setSlotsLoading(true);
     setStep("slots");
     try {
-      const res = await getSlots(clinicSlug, eventSlug, dateStr);
+      const res = await getSlots(clinicSlug, eventSlug, dateStr, timezone);
       setSlots(res);
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Failed to load slots");
@@ -132,6 +137,7 @@ export function BookingPage() {
         date: selectedDate,
         time: selectedTime,
         customAnswers,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
       });
       setBookingId(res.bookingId);
       setStep("confirm");
