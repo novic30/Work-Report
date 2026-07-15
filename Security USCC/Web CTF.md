@@ -39,4 +39,13 @@
 	        
 
 - XSS:
-	- 
+
+
+
+- SSRF filter bypass:
+	- When black list disables file:// etc. Try to use whitespaces like below:
+		- %C2%A0file:///usr/bin/bash This is basically <whitespace>file....
+			- Actually just doing _file... where _ is spacebar didnt work. Instead we had to change it up as that was filtered and ignored. Unlike the UTF-8 url encoding. This had to be %c2%a0 not %a0 alone as utf-8 works not windows
+			- Another way is to go to console and do:
+				- copy('\u00a0') which is unicode whitespace
+				- then paste it before file... and that works as a bypass as well

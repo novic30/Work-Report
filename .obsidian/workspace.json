@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Security USCC/Web CTF.md",
+                "file": "Security USCC/PWN CTF.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Web CTF"
+              "title": "PWN CTF"
             }
           }
         ]
@@ -53,7 +53,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "web ctf",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -74,13 +74,11 @@
               "title": "Bookmarks"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "right": {
     "id": "52b23d32bf3406df",
@@ -188,6 +186,10 @@
   },
   "active": "e38a960df3fc0f9b",
   "lastOpenFiles": [
+    "Pasted image 20260715085133.png",
+    "Pasted image 20260715083144.png",
+    "Security USCC/Web CTF.md",
+    "Security USCC/PWN CTF.md",
     "Calender-App/_tmp_34748_65faacd2efef3d71bb7a3a28116d7086",
     "Calender-App/frontend/_tmp_500_e601d39833bfb6aaaca410a6890c0bb2",
     "Financial Knowledge/Banks.md",
@@ -199,9 +201,7 @@
     "Calender-App/server/routes",
     "Calender-App/server/middleware/auth.js",
     "Calender-App/server/middleware",
-    "Calender-App/server/jobs/reminders.js",
     "Financial Knowledge/Spending Plan or Budgeting.md",
-    "Security USCC/Web CTF.md",
     "WebSockets/WebSocket.md",
     "WebSockets/WebSocket/node_modules/vary/HISTORY.md",
     "WebSockets/WebSocket/node_modules/type-is/node_modules/content-type/README.md",
@@ -223,7 +223,6 @@
     "WebSockets/WebSocket/node_modules/finalhandler/README.md",
     "WebSockets/WebSocket/node_modules/finalhandler/HISTORY.md",
     "WebSockets/WebSocket/node_modules/express/Readme.md",
-    "WebSockets/WebSocket/node_modules/etag/HISTORY.md",
     "WebSockets/Pasted image 20260615131402.png",
     "WebSockets/Pasted image 20260615134831.png",
     "WebSockets/Pasted image 20260615131612.png",
