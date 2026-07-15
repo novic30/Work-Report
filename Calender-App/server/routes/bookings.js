@@ -166,12 +166,18 @@ router.delete("/:id", requireAuth, async (req, res) => {
       b.id,
     ]);
 
-    // Notify client of cancellation
+    // Notify client and clinic of cancellation
     try {
       await sendMail(b.clinic_email, {
         to: b.client_email,
         subject: `Booking cancelled: ${b.event_name}`,
         text: `Hello ${b.client_name},\n\nYour appointment on ${cancelTimeStr} (${cancelTz}) has been cancelled.\n\nPlease get in touch to reschedule.`,
+      });
+
+      await sendMail(b.clinic_email, {
+        to: b.clinic_email,
+        subject: `Booking cancelled: ${b.event_name}`,
+        text: `Hello clinic,\n\nBooking for ${b.client_name} on ${cancelTimeStr} (${cancelTz}) has been cancelled.`,
       });
     } catch (mailErr) {
       console.log(
